@@ -29,7 +29,7 @@ class CreationSortieType extends AbstractType
                 'choice_label' => 'nomLieu'])
             ->add('Enregistrer',SubmitType::class)
             ->add('Publier',SubmitType::class)
-            ->add('Annuler',SubmitType::class)
+            //->add('Annuler',SubmitType::class)
 
         ;
     }

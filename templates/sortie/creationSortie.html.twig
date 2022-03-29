@@ -3,6 +3,23 @@
 {% block title %}Creation Sortie{% endblock %}
 
 {% block body %}
-    {{form(sortieForm)}}
+    <div class="border rounded p-4 offset-2 col-8 shadow">
+        <h3 class="text-center p-4">Organiser votre sortie</h3>
+
+        {{form_start(sortieForm)}}
+            {{ form_row(sortieForm.nom) }}
+            {{ form_row(sortieForm.dateHeureDebut) }}
+            {{ form_row(sortieForm.duree) }}
+            {{ form_row(sortieForm.dateLimiteInscription) }}
+            {{ form_row(sortieForm.nbInscriptionsMax) }}
+            {{ form_row(sortieForm.infoSortie) }}
+            {{ form_row(sortieForm.urlPhoto) }}
+            {{ form_row(sortieForm.lieu) }}
+            {{ form_row(sortieForm.Enregistrer) }}
+            {{ form_row(sortieForm.Publier,{}) }}
+            <a href="{{ path("app_main") }}" class="btn btn-primary">Annuler</a>
+        {{form_end(sortieForm)}}
+
+    </div>
 
 {% endblock %}

@@ -37,38 +37,23 @@ class SortieController extends AbstractController
         //Attribuer un état en fonction du bouton cliqué => Etat : Créée
         if($sortieForm->getClickedButton() === $sortieForm->get('Enregistrer'))
         {
-
             $etat = $etatRepo->find(1);
             $sortie->setEtat($etat);
             $em->persist($sortie);
             $em->flush();
-
         }
 
         //Attribuer un état en fonction du bouton cliqué => Etat : Ouvert
         if($sortieForm->getClickedButton() === $sortieForm->get('Publier'))
         {
-
             $etat = $etatRepo->find(2);
             $sortie->setEtat($etat);
             $em->persist($sortie);
             $em->flush();
-
         }
 
-        //Attribuer un état en fonction du bouton cliqué => Bouton annulé
-        if($sortieForm->getClickedButton() === $sortieForm->get('Annuler'))
-        {
-            return $this->redirectToRoute("app_main");
-        }
-
-
-
-
-        if($sortieForm->isSubmitted()){
-            //$sortieRepo->add($sortie,true);
-        }
 
         return $this->render('sortie/creationSortie.html.twig', ["sortieForm"=>$sortieForm->createView()]);
     }
+
 }
