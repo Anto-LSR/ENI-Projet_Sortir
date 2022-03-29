@@ -3,50 +3,54 @@
 {% block title %}Hello UserController!{% endblock %}
 
 {% block body %}
-    <style>
-        .example-wrapper {
-            margin: 1em auto;
-            max-width: 800px;
-            width: 95%;
-            font: 18px/1.5 sans-serif;
-        }
+<style>
+    .example-wrapper {
+        margin: 1em auto;
+        max-width: 800px;
+        width: 95%;
+        font: 18px/1.5 sans-serif;
+    }
 
-        .example-wrapper code {
-            background: #F5F5F5;
-            padding: 2px 6px;
-        }
-    </style>
+    .example-wrapper code {
+        background: #F5F5F5;
+        padding: 2px 6px;
+    }
+</style>
 
-    <div class="example-wrapper">
-        <h1>Hello {{ user.pseudo }}! ✅</h1>
-        <div class="row text-center">
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label }}">
-                        {{message}}
-                    </div>
-                {% endfor %}
+<div class="example-wrapper">
+    <h1>Hello {{ user.pseudo }}! ✅</h1>
+    <div class="row text-center">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
             {% endfor %}
-        </div>
-
-        {{ form_start(modifProfilForm) }}
-            {{form_row(modifProfilForm.nom)}}
-            {{form_row(modifProfilForm.prenom)}}
-            {{form_row(modifProfilForm.pseudo)}}
-            {{form_row(modifProfilForm.email)}}
-            {{form_row(modifProfilForm.telephone)}}
-        <div class="mb-3">
-            <label for="verifPassword" class="form-label required">Mot de passe</label>
-            <input type="password"
-                   id="verifPassword"
-                   name="verifPassword"
-                   required="required"
-                   maxlength=""
-                   class="form-control"
-                   value="">
-        </div>
-        {{form_row(modifProfilForm.submit)}}
-        {{form_row(modifProfilForm.Annuler)}}
-        {{form_row(modifProfilForm.ModifMDP)}}
+        {% endfor %}
     </div>
+
+    {{ form_start(modifProfilForm) }}
+    {{ form_row(modifProfilForm.nom) }}
+    {{ form_row(modifProfilForm.prenom) }}
+    {{ form_row(modifProfilForm.pseudo) }}
+    {{ form_row(modifProfilForm.email) }}
+    {{ form_row(modifProfilForm.telephone) }}
+    <div class="mb-3">
+        <label for="verifPassword" class="form-label required">Mot de passe</label>
+        <input type="password"
+               id="verifPassword"
+               name="verifPassword"
+               required="required"
+               maxlength=""
+               class="form-control"
+               value="">
+    </div>
+    {{ form_row(modifProfilForm.submit) }}
+    {{ form_row(modifProfilForm.Annuler) }}
+    {{ form_row(modifProfilForm.ModifMDP) }}
+    {{ form_rest(modifProfilForm)}}
+
+{{ form_errors(modifProfilForm) }}
+{{ form_end(modifProfilForm) }}
+</div>
 {% endblock %}

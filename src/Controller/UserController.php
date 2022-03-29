@@ -33,23 +33,17 @@ class UserController extends AbstractController
         $modifProfilForm = $this->createForm(ModifProfilType::class, $user);
         $modifProfilForm->handleRequest($request);
 
-
-
-        if ($modifProfilForm->isSubmitted()) {
+        if ($modifProfilForm->isSubmitted() && $modifProfilForm->isValid()) {
             $password = $_POST["verifPassword"];
-
             $isCorrect = password_verify($password, $oldPassword);
-            $tel = $_POST["modif_profil"]["telephone"];
 
             if ($isCorrect) {
-                if(strlen($tel) < 10){
 
-                } else {
                     $this->addFlash("success", "Modifications enregistrées");
                     // on insère les nouvelles informations dans la base de données
 
                     $em->flush();
-                }
+
 
             } else {
 
@@ -82,7 +76,7 @@ class UserController extends AbstractController
         $modifMDPForm->handleRequest($request);
 
 
-        if ($modifMDPForm->isSubmitted()) {
+        if ($modifMDPForm->isSubmitted() && $modifMDPForm->isValid()) {
 
             $oldPassword = $_POST["update_password"]["password"];
             $oldHashedPassword = $userPasswordHasher->hashPassword(

@@ -47,18 +47,20 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=30)
+     * @Assert\Regex (pattern="^[A-Z][A-Za-z\é\è\ê\-]+$^")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=30)
+     * @Assert\Regex (pattern="^[A-Z][A-Za-z\é\è\ê\-]+$^")
      */
     private $prenom;
 
     /**
      * @ORM\Column(type="string", length=15, nullable=true)
      * @Assert\Length(min = 10, max = 10, exactMessage="Le numéro de téléphone doit comporter 10 chiffres")
-     * @Assert\Regex(pattern="/^[0-9]*$/", message="number_only")
+     * @Assert\Regex(pattern="/^[0-9]*$/", message="Merci de n'utiliser que des chiffres")
      */
     private $telephone;
 
