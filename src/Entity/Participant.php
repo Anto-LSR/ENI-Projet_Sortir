@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ParticipantRepository::class)
@@ -56,6 +57,8 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=15, nullable=true)
+     * @Assert\Length(min = 10, max = 10, exactMessage="Le numéro de téléphone doit comporter 10 chiffres")
+     * @Assert\Regex(pattern="/^[0-9]*$/", message="number_only")
      */
     private $telephone;
 

@@ -33,18 +33,29 @@ class UserController extends AbstractController
         $modifProfilForm = $this->createForm(ModifProfilType::class, $user);
         $modifProfilForm->handleRequest($request);
 
+
+
         if ($modifProfilForm->isSubmitted()) {
             $password = $_POST["verifPassword"];
 
             $isCorrect = password_verify($password, $oldPassword);
+            $tel = $_POST["modif_profil"]["telephone"];
 
             if ($isCorrect) {
-                // on insère les nouvelles informations dans la base de données
-                $em->flush();
-            } else {
-                dd('coucou');
+                if(strlen($tel) < 10){
 
-                $this->addFlash("danger", "Wish with Id='$id' has been removed");
+                } else {
+                    $this->addFlash("success", "Modifications enregistrées");
+                    // on insère les nouvelles informations dans la base de données
+
+                    $em->flush();
+                }
+
+            } else {
+
+
+                $this->addFlash("danger", "Votre mot de passe est incorrect");
+                return $this->redirectToRoute('app_profil');
 
 
             }

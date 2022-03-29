@@ -19,6 +19,15 @@
 
     <div class="example-wrapper">
         <h1>Hello {{ user.pseudo }}! ✅</h1>
+        <div class="row text-center">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{message}}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
 
         {{ form_start(modifProfilForm) }}
             {{form_row(modifProfilForm.nom)}}
@@ -28,7 +37,7 @@
             {{form_row(modifProfilForm.telephone)}}
         <div class="mb-3">
             <label for="verifPassword" class="form-label required">Mot de passe</label>
-            <input type="text"
+            <input type="password"
                    id="verifPassword"
                    name="verifPassword"
                    required="required"
