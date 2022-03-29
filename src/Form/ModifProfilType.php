@@ -29,9 +29,7 @@ class ModifProfilType extends AbstractType
                 'required' => false,
                 'label' => 'Téléphone'
             ])
-            ->add('password', PasswordType::class, [
-                'label' => 'Mot de passe'
-            ])
+
             #->add('site')
             #->add('sorties')
             ->add('submit', SubmitType::class, [

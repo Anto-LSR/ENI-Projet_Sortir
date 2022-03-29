@@ -28,17 +28,25 @@ class UserController extends AbstractController
 
         //On récupère l'utilisateur connecté
         $user = $this->getUser();
+        $oldPassword = $user->getPassword();
+
         $modifProfilForm = $this->createForm(ModifProfilType::class, $user);
         $modifProfilForm->handleRequest($request);
 
         if ($modifProfilForm->isSubmitted()) {
-            $password = $_POST["modif_profil"]["password"];
-            $hashedPassword = $userPasswordHasher->hashPassword(
-                $user,
-                $password);
-            if($password === $user->getPassword()){
+            $password = $_POST["verifPassword"];
+
+            $isCorrect = password_verify($password, $oldPassword);
+
+            if ($isCorrect) {
                 // on insère les nouvelles informations dans la base de données
                 $em->flush();
+            } else {
+                dd('coucou');
+
+                $this->addFlash("danger", "Wish with Id='$id' has been removed");
+
+
             }
         }
 
