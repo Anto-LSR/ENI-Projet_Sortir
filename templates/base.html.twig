@@ -24,7 +24,7 @@
 
         <div class="container-fluid">
             <div>
-            <a class="navbar-brand" href="#"><img src="{{ asset('assets/img/logo.png') }}" alt=""></a>
+            <a class="navbar-brand" href="{{ path('app_main') }}"><img src="{{ asset('assets/img/logo.png') }}" alt=""></a>
             </div>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -54,6 +54,12 @@
                             <a class="nav-link" href="{{path("app_sortie" ) }}">Nouvelle Sortie</a>
                         </li>
 
+                    {% endif %}
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{path("app_register" ) }}">Inscriptions</a>
+                        </li>
                     {% endif %}
 
                     {% if app.user %}
