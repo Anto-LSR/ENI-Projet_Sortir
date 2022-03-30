@@ -21,22 +21,25 @@ class Sortie
     private $id;
 
     /**
+     * @Assert\NotBlank(message="Vous devez nommer votre sortie")
      * @ORM\Column(type="string", length=255)
      */
     private $nom;
 
     /**
-     * @Assert\GreaterThan("today")
+     * @Assert\GreaterThan("today", message="La sortie doit se dérouler après le {{ compared_value }}")
      * @ORM\Column(type="datetime")
      */
     private $dateHeureDebut;
 
     /**
+     * @Assert\Regex(pattern="/^[0-9]+$/i", message="zezr")
      * @ORM\Column(type="integer", nullable=true)
      */
     private $duree;
 
     /**
+     * @Assert\Type("\DateTimeInterface")
      * @ORM\Column(type="datetime")
      */
     private $dateLimiteInscription;

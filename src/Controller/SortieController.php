@@ -35,12 +35,13 @@ class SortieController extends AbstractController
         $sortie->setSite($idSite);
 
         //Attribuer un état en fonction du bouton cliqué => Etat : Créée
-        if($sortieForm->getClickedButton() === $sortieForm->get('Enregistrer'))
+        if(($sortieForm->getClickedButton() === $sortieForm->get('Enregistrer'))&&($sortieForm->isValid() && $sortieForm->isSubmitted()))
         {
             $etat = $etatRepo->find(1);
             $sortie->setEtat($etat);
             $em->persist($sortie);
             $em->flush();
+            $this->addFlash("success","Nouvelle sortie créée");
         }
 
         //Attribuer un état en fonction du bouton cliqué => Etat : Ouvert
@@ -50,6 +51,7 @@ class SortieController extends AbstractController
             $sortie->setEtat($etat);
             $em->persist($sortie);
             $em->flush();
+            $this->addFlash("success","Sortie publiée");
         }
 
 

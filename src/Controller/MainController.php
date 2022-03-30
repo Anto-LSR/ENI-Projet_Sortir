@@ -14,11 +14,15 @@ class MainController extends AbstractController
     /**
      * @Route("/", name="app_main")
      */
-    public function afficherSorties(SortieRepository $sortieRepo, ParticipantRepository $participantsRepo,UserInterface $user): Response
+    public function afficherSorties(SortieRepository $sortieRepo, ParticipantRepository $participantsRepo): Response
     {
+        if($this->isGranted('ROLE_USER') == false){
+            return $this->redirectToRoute("app_login");
+        }
+
         $sorties = $sortieRepo->findAll();
         $participants = $participantsRepo->findAll();
-        $userId = $user->getId();
+        $userId = $this->getUser()->getId();
 
 
 
