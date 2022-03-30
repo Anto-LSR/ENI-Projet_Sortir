@@ -38,7 +38,6 @@ class UserController extends AbstractController
             $isCorrect = password_verify($password, $oldPassword);
 
             if ($isCorrect) {
-
                     $this->addFlash("success", "Modifications enregistrées");
                     // on insère les nouvelles informations dans la base de données
 

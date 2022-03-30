@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
+{% block title %}Modifier Mot de passe{% endblock %}
 
 {% block body %}
     <style>
@@ -9,8 +9,14 @@
     </style>
 
     <div class="example-wrapper">
-        <h1>Hello {{ user.pseudo }}! ✅</h1>
+        <h1 class="text-center mb-5 mt-5">Modifier votre mot de passe</h1>
 
-        {{  form(modifMDPForm) }}
+        {{  form_start(modifMDPForm) }}
+        {{ form_row(modifMDPForm.password) }}
+        {{ form_row(modifMDPForm.plainPassword) }}
+        <div class="button_row d-flex mt-5  justify-content-around">
+        {{ form_row(modifMDPForm.submit) }}
+            <a href="/profil">{{ form_row(modifMDPForm.Annuler) }}</a>
+        </div>
     </div>
 {% endblock %}

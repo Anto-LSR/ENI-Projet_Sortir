@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
+{% block title %}Mon Profil{% endblock %}
 
 {% block body %}
 <style>
@@ -18,7 +18,7 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ user.pseudo }}! ✅</h1>
+    <h1 class="text-center mb-5 mt-5">Vos informations</h1>
     <div class="row text-center">
         {% for label, messages in app.flashes %}
             {% for message in messages %}
@@ -29,14 +29,17 @@
         {% endfor %}
     </div>
 
+    <h4>{{  app.user.prenom }} {{ app.user.nom }}</h4>
+
+
     {{ form_start(modifProfilForm) }}
-    {{ form_row(modifProfilForm.nom) }}
-    {{ form_row(modifProfilForm.prenom) }}
-    {{ form_row(modifProfilForm.pseudo) }}
-    {{ form_row(modifProfilForm.email) }}
+    {{ form_label(modifProfilForm.pseudo, "Pseudo") }} <span class="text-danger">*</span>
+    {{ form_widget(modifProfilForm.pseudo) }}
+    {{ form_label(modifProfilForm.email, "Email") }} <span class="text-danger">*</span>
+    {{ form_widget(modifProfilForm.email) }}
     {{ form_row(modifProfilForm.telephone) }}
     <div class="mb-3">
-        <label for=     "verifPassword" class="form-label required">Mot de passe</label>
+        <label for=     "verifPassword" class="form-label required">Mot de passe <span class="text-danger">*</span></label>
         <input type=    "password"
                id=      "verifPassword"
                name=    "verifPassword"
@@ -47,13 +50,13 @@
     </div>
     <div class="button_row d-flex mt-5  justify-content-between">
         {{ form_row(modifProfilForm.submit, {'attr': {'class': ' btn-success'}}) }}
-        {{ form_row(modifProfilForm.Annuler,  {'attr': {'class': ' btn-danger'}}) }}
-        {{ form_row(modifProfilForm.ModifMDP,  {'attr': {'class': ' btn-primary'}} )}}
+        <a href="/"> {{ form_row(modifProfilForm.Annuler,  {'attr': {'class': ' btn-danger'}}) }}</a>
+        <a href="/profil/changer-motdepasse">{{ form_row(modifProfilForm.ModifMDP,  {'attr': {'class': ' btn-primary'}} )}}</a>
     </div>
 
     {{ form_rest(modifProfilForm)}}
 
-{{ form_errors(modifProfilForm) }}
+
 {{ form_end(modifProfilForm) }}
 </div>
 {% endblock %}

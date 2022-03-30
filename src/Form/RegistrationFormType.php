@@ -25,7 +25,9 @@ class RegistrationFormType extends AbstractType
             ->add('email',EmailType::class)
             ->add('pseudo',TextType::class)
             ->add('nom',TextType::class)
-            ->add('prenom',TextType::class)
+            ->add('prenom',TextType::class,[
+                'label' => 'Prénom'
+            ])
             ->add('site', EntityType::class, [
                 'class' => Site::class,
                 'choice_label' => function ($site) {
@@ -61,6 +63,7 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('administrateur', CheckboxType::class)
         ;
     }
 

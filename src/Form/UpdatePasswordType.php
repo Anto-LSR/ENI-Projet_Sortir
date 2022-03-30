@@ -18,12 +18,14 @@ class UpdatePasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('password', PasswordType::class)
+            ->add('password', PasswordType::class, [
+                'label' => 'Ancien mot de passe'
+            ])
             ->add('plainPassword', RepeatedType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'type' => PasswordType::class,
-                'first_options'  => ['label' => 'Mot de passe'],
+                'first_options'  => ['label' => 'Nouveau mot de passe'],
                 'second_options' => ['label' => 'Confirmation'],
                 'invalid_message' => 'Les mots de passe ne correspondent pas.',
                 'mapped' => false,
