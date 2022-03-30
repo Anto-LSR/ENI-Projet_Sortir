@@ -94,8 +94,7 @@
             getLieux(selectedVille, data);
 
             const selectVille = document.getElementById('ville')
-            selectVille.addEventListener('change', (test) => {
-                console.log(test)
+            selectVille.addEventListener('change', () => {
                 let selectedVille = villeSelect.value
                 getLieux(selectedVille, data)
             })
@@ -108,7 +107,7 @@
 
             const data = await fetch('/getVilles')
             let villes = JSON.parse(await data.json())
-            console.log(villes);
+            //console.log(villes);
 
 
             //**********************************
@@ -129,17 +128,17 @@
 
         function getLieux(selectedVille, allVilles) {
             let lieuxSelect = document.getElementById('lieu')
-            lieuxSelect.innerHTML =''
+            lieuxSelect.innerHTML = ''
 
             let lieux = []
-            const ville = allVilles.find(ville => ville.id == selectedVille);
+            const ville = allVilles.find(ville => ville.id == selectedVille); //<---------- TESTER TRIPLE EGAL
 
             console.log(selectedVille + '*******************')
             console.log(allVilles)
             ville.lieux.forEach(elem => {
                 let option = document.createElement('option')
                 option.setAttribute('value', elem.id)
-                option.innerHTML = elem.nom
+                option.innerHTML = elem.nom;
                 lieuxSelect.appendChild(option)
             })
 
