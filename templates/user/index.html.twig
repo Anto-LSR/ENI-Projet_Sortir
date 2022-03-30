@@ -36,18 +36,21 @@
     {{ form_row(modifProfilForm.email) }}
     {{ form_row(modifProfilForm.telephone) }}
     <div class="mb-3">
-        <label for="verifPassword" class="form-label required">Mot de passe</label>
-        <input type="password"
-               id="verifPassword"
-               name="verifPassword"
+        <label for=     "verifPassword" class="form-label required">Mot de passe</label>
+        <input type=    "password"
+               id=      "verifPassword"
+               name=    "verifPassword"
                required="required"
                maxlength=""
-               class="form-control"
+               class=   "form-control"
                value="">
     </div>
-    {{ form_row(modifProfilForm.submit) }}
-    {{ form_row(modifProfilForm.Annuler) }}
-    {{ form_row(modifProfilForm.ModifMDP) }}
+    <div class="button_row d-flex mt-5  justify-content-between">
+        {{ form_row(modifProfilForm.submit, {'attr': {'class': ' btn-success'}}) }}
+        {{ form_row(modifProfilForm.Annuler,  {'attr': {'class': ' btn-danger'}}) }}
+        {{ form_row(modifProfilForm.ModifMDP,  {'attr': {'class': ' btn-primary'}} )}}
+    </div>
+
     {{ form_rest(modifProfilForm)}}
 
 {{ form_errors(modifProfilForm) }}

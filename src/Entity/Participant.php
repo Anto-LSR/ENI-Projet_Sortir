@@ -47,13 +47,13 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=30)
-     * @Assert\Regex (pattern="^[A-Z][A-Za-z\é\è\ê\-]+$^")
+     * @Assert\Regex (pattern="/^[a-z ,.'-]+$/i")
      */
     private $nom;
 
     /**
      * @ORM\Column(type="string", length=30)
-     * @Assert\Regex (pattern="^[A-Z][A-Za-z\é\è\ê\-]+$^")
+     * @Assert\Regex (pattern="/^[a-z ,.'-]+$/i")
      */
     private $prenom;
 
