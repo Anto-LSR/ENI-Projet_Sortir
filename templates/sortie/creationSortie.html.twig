@@ -10,23 +10,46 @@
             {% for messages in app.flashes %}
                 {% for message in messages %}
                     <div class="alert alert-success">
-                        {{message}}
+                        {{ message }}
                     </div>
                 {% endfor %}
             {% endfor %}
         </div>
 
-        {{form_start(sortieForm)}}
+        {{ form_start(sortieForm) }}
 
-            {{ form_row(sortieForm.nom) }}
-            {{ form_row(sortieForm.dateHeureDebut) }}
-            {{ form_row(sortieForm.duree) }}
-            {{ form_row(sortieForm.dateLimiteInscription) }}
-            {{ form_row(sortieForm.nbInscriptionsMax) }}
-            {{ form_row(sortieForm.infoSortie) }}
-            {{ form_row(sortieForm.urlPhoto) }}
-            {{ form_row(sortieForm.lieu) }}
+        {{ form_row(sortieForm.nom) }}
+        {{ form_row(sortieForm.dateHeureDebut) }}
+        {{ form_row(sortieForm.duree) }}
+        {{ form_row(sortieForm.dateLimiteInscription) }}
+        {{ form_row(sortieForm.nbInscriptionsMax) }}
+        {{ form_row(sortieForm.infoSortie) }}
+        {{ form_row(sortieForm.urlPhoto) }}
+        <div class="ville_container d-flex justify-content-between">
+            <div class="mb-3">
+                <label class="form-label required" for="ville">Ville</label>
+                <select class="form-control" name="" id="ville">
 
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="lieu_container d-flex justify-content-between">
+            <div class="mb-3">
+                <label class="form-label required" for="lieu">Lieu</label>
+                <select class="form-control" name="" id="lieu">
+
+
+                </select>
+                <button type="button" class="btn btn_lieu" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
+
+        </div>
         <div class="button_row d-flex mt-5  justify-content-around">
 
             {{ form_row(sortieForm.Enregistrer) }}
@@ -36,9 +59,91 @@
             </div>
         </div>
 
-        {{form_end(sortieForm)}}
+        {{ form_end(sortieForm) }}
 
 
+    </div>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
         </div>
+    </div>
 
+
+
+
+    <script>
+
+
+        getVilles();
+
+        async function getVilles() {
+            //Récupérer les données depuis la DB
+            const data = await fetch('/getVilles')
+
+            let villes = JSON.parse(await data.json())
+            //console.log(villes);
+
+            //Afficher les villes dans le select
+            let villeSelect = document.getElementById("ville")
+            villes.forEach(element => {
+                let option = document.createElement('option')
+                option.setAttribute('value', element.id)
+                option.innerHTML = element.nomVille
+                option.setAttribute('class', "villeOption")
+                villeSelect.appendChild(option)
+            })
+
+
+            let selectedVille = villeSelect.value
+            let lieuxSelect = document.getElementById('lieu')
+            //Afficher les lieux dans le select
+
+            let lieux = []
+            villes.forEach(element => {
+                lieux.push(element.lieux)
+            })
+
+            console.log(lieux)
+
+            lieux.forEach(lieu => {
+
+                if ((Object.keys(lieu).length) > 1) {
+                    lieu.forEach(elem1 => {
+                        console.log(elem1.nom)
+                    })
+
+                } else {
+                 //console.log(Object.getOwnPropertyNames(lieu)[0])
+                 console.log(lieu[Object.getOwnPropertyNames(lieu)[0] + ''].name)
+
+                }
+
+            })
+
+
+        }
+
+
+        let option = document.getElementById('ville')
+        option.addEventListener('change', () => {
+            //console.log('coucou')
+        })
+
+
+    </script>
 {% endblock %}

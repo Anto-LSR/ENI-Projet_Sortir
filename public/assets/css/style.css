@@ -1,3 +1,24 @@
 .navbar-collapse{
     flex-grow: 0 !important;
 }
+
+.btn_lieu{
+    border-radius: 50% ;
+    width: 33px;
+    height: 33px;
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+
+
+}
+
+.btn_lieu:hover{
+    background-color: #0b5ed7;
+}
+
+.ville_container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
