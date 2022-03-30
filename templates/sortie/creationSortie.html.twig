@@ -26,11 +26,19 @@
             {{ form_row(sortieForm.infoSortie) }}
             {{ form_row(sortieForm.urlPhoto) }}
             {{ form_row(sortieForm.lieu) }}
+
+        <div class="button_row d-flex mt-5  justify-content-around">
+
             {{ form_row(sortieForm.Enregistrer) }}
             {{ form_row(sortieForm.Publier,{}) }}
-            <a href="{{ path("app_main") }}" class="btn btn-primary">Annuler</a>
+            <div>
+                <a href="{{ path("app_main") }}" class="btn btn-primary">Annuler</a>
+            </div>
+        </div>
+
         {{form_end(sortieForm)}}
 
-    </div>
+
+        </div>
 
 {% endblock %}

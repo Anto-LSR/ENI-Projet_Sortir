@@ -33,7 +33,7 @@ class Sortie
     private $dateHeureDebut;
 
     /**
-     * @Assert\Regex(pattern="/^[0-9]+$/i", message="zezr")
+     * @Assert\Regex(pattern="/^[0-9]+$/i")
      * @ORM\Column(type="integer", nullable=true)
      */
     private $duree;
@@ -45,6 +45,7 @@ class Sortie
     private $dateLimiteInscription;
 
     /**
+     * @Assert\Regex(pattern="/^[0-9]+$/i")
      * @ORM\Column(type="integer")
      */
     private $nbInscriptionsMax;

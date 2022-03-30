@@ -28,14 +28,16 @@ class CreationSortieType extends AbstractType
             ->add('nom', TextType::class,['label' => "Nom *" ])
             ->add('dateHeureDebut', DateTimeType::class, ['widget'=>"single_text"])
             ->add('duree',IntegerType::class, ['label' => 'Durée en min *', 'required' => false])
+
             ->add('dateLimiteInscription',DateTimeType::class, [
                 'widget'=>"single_text",
                 'constraints' => [
                 new Assert\NotNull(),
-                new Assert\GreaterThan([
+                new Assert\LessThan([
                     'propertyPath' => 'parent.all[dateHeureDebut].data',
-                    'message'=>"La date limite d'inscription ne peut pas être antérieure à la date de début."])]])
-            ->add('nbInscriptionsMax', TextType::class,['label' => "Nombre d'inscriptions maximum *"])
+                    'message'=>"La date limite d'inscription ne peut être postérieure à la date de début."])]])
+
+            ->add('nbInscriptionsMax', IntegerType::class,['label' => "Nombre d'inscriptions maximum *"])
             ->add('infoSortie')
             ->add('urlPhoto')
             ->add('lieu',EntityType::class,[
