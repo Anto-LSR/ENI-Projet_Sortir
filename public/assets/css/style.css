@@ -3,12 +3,16 @@
 }
 
 .btn_lieu{
-    border-radius: 50% ;
+    border-radius: 20%;
     width: 33px;
     height: 33px;
     background-color: #0d6efd;
     color: white;
     border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 15px;
 
 
 }
@@ -21,4 +25,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.ville_input{
+    width: 100%;
+}
+
+.lieu_input{
+    width: 100%;
 }

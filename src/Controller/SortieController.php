@@ -75,9 +75,6 @@ class SortieController extends AbstractController
         $jsonVilles = array();
         $lieux = $lieuRepo->findAll();
         $jsonLieux = array();
-        //dd($lieux);
-
-
 
         for ($i = 0; $i <= sizeof($villes) - 1; $i++) {
             $jsonVilles[$i]["nomVille"] = $villes[$i]->getNomVille();
@@ -85,21 +82,23 @@ class SortieController extends AbstractController
             $jsonVilles[$i]["id"] = $villes[$i]->getId();
             $idVille = $villes[$i]->getId();
 
+            $k = 0;
                 for($j = 0; $j <= sizeof($lieux) -1; $j++){
                     $lieu_ville = $lieux[$j]->getVille();
 
                     if($idVille == $lieu_ville->getId()){
-                        $jsonVilles[$i]["lieux"][$j]["id"] = $lieux[$j]->getId();
-                        $jsonVilles[$i]["lieux"][$j]["nom"] = $lieux[$j]->getNomLieu();
-                        $jsonVilles[$i]["lieux"][$j]["rue"] = $lieux[$j]->getRue();
-                        $jsonVilles[$i]["lieux"][$j]["latitude"] = $lieux[$j]->getLatitude();
-                        $jsonVilles[$i]["lieux"][$j]["longitude"] = $lieux[$j]->getLongitude();
+
+                        $jsonVilles[$i]["lieux"][$k]["id"] = $lieux[$j]->getId();
+                        $jsonVilles[$i]["lieux"][$k]["nom"] = $lieux[$j]->getNomLieu();
+                        $jsonVilles[$i]["lieux"][$k]["rue"] = $lieux[$j]->getRue();
+                        $jsonVilles[$i]["lieux"][$k]["latitude"] = $lieux[$j]->getLatitude();
+                        $jsonVilles[$i]["lieux"][$k]["longitude"] = $lieux[$j]->getLongitude();
+                        $jsonVilles[$i]["lieux"][$k]["villeId"] = $villes[$i]->getId();
+                        $k++;
                     }
                 }
         }
         $jsonContent = json_encode($jsonVilles);
-
-
         return $this->json($jsonContent);
     }
 }
