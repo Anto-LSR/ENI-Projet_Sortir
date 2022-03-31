@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
+use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Form\AjoutLieuType;
 use App\Form\CreationSortieType;
 use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
@@ -57,9 +59,12 @@ class SortieController extends AbstractController
             $em->flush();
             $this->addFlash("success", "Sortie publiée");
         }
+        $lieu = new Lieu();
+        $ajoutLieuForm = $this->createForm(AjoutLieuType::class, $lieu);
+        $ajoutLieuForm->handleRequest($request);
 
 
-        return $this->render('sortie/creationSortie.html.twig', ["sortieForm" => $sortieForm->createView()]);
+        return $this->render('sortie/creationSortie.html.twig', ["sortieForm" => $sortieForm->createView(), "lieuForm" => $ajoutLieuForm->createView()]);
     }
 
     /**
@@ -100,5 +105,22 @@ class SortieController extends AbstractController
         }
         $jsonContent = json_encode($jsonVilles);
         return $this->json($jsonContent);
+    }
+
+    /**
+     * @Route("/addLieu", name="add_lieu")
+     */
+    public function addLieu(Request $req, LieuRepository $lieuRepo, VilleRepository $villeRepo){
+        $data = json_decode($req->getContent());
+        $lieu = new Lieu();
+        $ville = $villeRepo->find($data->ville);
+        $lieu->setNomLieu($data->nomLieu);
+        $lieu->setRue($data->rue);
+        $lieu->setLatitude($data->latitude);
+        $lieu->setLongitude($data->longitude);
+        $lieu->setVille($ville);
+
+        $lieuRepo->add($lieu);
+        return $this->json($req->getContent());
     }
 }

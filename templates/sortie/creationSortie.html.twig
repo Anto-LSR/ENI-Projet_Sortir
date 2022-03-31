@@ -67,18 +67,19 @@
 
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
+        <div class="modal-dialog ">
+            <div class="modal-content bg-dark">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Ajouter un lieu</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    ...
+                <div class="modal-body ">
+                    {{ form(lieuForm) }}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="addLieuBtn" data-bs-dismiss="modal">Ajouter
+                    </button>
                 </div>
             </div>
         </div>
@@ -95,8 +96,46 @@
 
             const selectVille = document.getElementById('ville')
             selectVille.addEventListener('change', () => {
+
                 let selectedVille = villeSelect.value
+
                 getLieux(selectedVille, data)
+
+
+            })
+
+            const addBtn = document.getElementById('addLieuBtn')
+            addBtn.addEventListener('click', async (e) => {
+                const villeSelected = document.getElementById('ajout_lieu_ville').value
+                const nomLieu = document.getElementById('ajout_lieu_nomLieu').value
+                const rue = document.getElementById('ajout_lieu_rue').value
+                const latitude = document.getElementById('ajout_lieu_latitude').value
+
+                const longitude = document.getElementById('ajout_lieu_longitude').value
+
+                const lieu = {
+                    nomLieu: nomLieu,
+                    rue: rue,
+                    latitude: latitude,
+                    longitude: longitude,
+                    ville: villeSelected,
+                }
+                let selectedVille = villeSelect.value
+
+
+                await fetch('/addLieu', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(lieu)
+                    }
+                )
+                data = await getVilles()
+
+               getLieux(selectedVille, data)
+
+
             })
         })
 
@@ -107,13 +146,15 @@
 
             const data = await fetch('/getVilles')
             let villes = JSON.parse(await data.json())
-            //console.log(villes);
+            console.log(villes);
 
 
             //**********************************
             //Afficher les villes dans le select
 
             let villeSelect = document.getElementById("ville")
+            villeSelect.innerHTML = ''
+
             villes.forEach(element => {
                 let option = document.createElement('option')
                 option.setAttribute('value', element.id)
@@ -130,11 +171,10 @@
             let lieuxSelect = document.getElementById('lieu')
             lieuxSelect.innerHTML = ''
 
-            let lieux = []
+            //let lieux = []
             const ville = allVilles.find(ville => ville.id == selectedVille); //<---------- TESTER TRIPLE EGAL
 
-            console.log(selectedVille + '*******************')
-            console.log(allVilles)
+
             ville.lieux.forEach(elem => {
                 let option = document.createElement('option')
                 option.setAttribute('value', elem.id)
