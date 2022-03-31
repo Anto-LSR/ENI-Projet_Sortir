@@ -26,14 +26,15 @@
                 <p>Ville organisatrice : {{sortie.site.nomSite}}</p>
                 <p>Lieu : {{sortie.lieu.nomLieu}}</p>
                 <p>Rue : {{sortie.lieu.rue}}</p>
-                <p>code postal : </p>
+                <p>Code postal : {{ sortie.lieu.ville.codePostal}} </p>
                 <p>Latitude : {{sortie.lieu.latitude}}</p>
                 <p>Longitude : {{sortie.lieu.longitude}}</p>
             </div>
                 <a class="btn btn-primary offset-4 col-4 mt-3" href="{{ path('app_main') }}">Retour</a>
                 <a class="btn btn-primary offset-4 col-4 mt-3" href="#">S'inscrire</a>
-
-
+            {% if (app.user.id == sortie.organisateur.id) %}
+                <a class="btn btn-primary offset-4 col-4 mt-3" href="{{ path('app_modifSortie', {id:sortie.id}) }}">Modifier</a>
+            {% endif %}
         </div>
 
         <div></div>

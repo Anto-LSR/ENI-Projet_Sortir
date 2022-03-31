@@ -1,0 +1,230 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification Sortie{% endblock %}
+
+{% block body %}
+    <div class="border rounded p-4 offset-2 col-8 shadow">
+        <h3 class="text-center p-4">Modifier votre sortie</h3>
+
+        <div class="row text-center">
+            {% for messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        {{ form_start(modifSortieForm) }}
+
+        {{ form_row(modifSortieForm.nom) }}
+        {{ form_row(modifSortieForm.dateHeureDebut) }}
+        {{ form_row(modifSortieForm.duree) }}
+        {{ form_row(modifSortieForm.dateLimiteInscription) }}
+        {{ form_row(modifSortieForm.nbInscriptionsMax) }}
+        {{ form_row(modifSortieForm.infoSortie) }}
+        {{ form_row(modifSortieForm.urlPhoto) }}
+        <div class="ville_container d-flex justify-content-between">
+            <div class="mb-3 ville_input">
+                <label class="form-label required" for="ville">Ville</label>
+                <select class="form-control" name="" id="ville">
+
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="lieu_container  justify-content-between">
+            <label class="form-label required" for="lieu">Lieu</label>
+            <div class="mb-3 lieu_input d-flex align-items-center">
+
+                <select class="form-control" name="" id="lieu">
+
+
+                </select>
+                <button type="button" class="btn btn_lieu" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
+
+        </div>
+        <div class="button_row d-flex mt-5  justify-content-around">
+
+            {{ form_row(modifSortieForm.Enregistrer) }}
+            {{ form_row(modifSortieForm.Publier,{}) }}
+            {{ form_row(modifSortieForm.Supprimer,{}) }}
+
+            <div>
+                <a href="{{ path("app_main") }}" class="btn btn-primary">Annuler</a>
+            </div>
+        </div>
+
+
+
+        {{ form_end(modifSortieForm) }}
+
+
+    </div>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ajouter un lieu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ">
+                    {{ form(lieuForm) }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="addLieuBtn" data-bs-dismiss="modal">Ajouter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script>
+        getVilles().then(data => {
+            let villeSelect = document.getElementById("ville")
+            let selectedVille = villeSelect.value
+            getLieux(selectedVille, data);
+
+            const selectVille = document.getElementById('ville')
+            selectVille.addEventListener('change', () => {
+
+                let selectedVille = villeSelect.value
+
+                getLieux(selectedVille, data)
+
+
+            })
+
+            const addBtn = document.getElementById('addLieuBtn')
+            addBtn.addEventListener('click', async (e) => {
+                const villeSelected = document.getElementById('ajout_lieu_ville').value
+                const nomLieu = document.getElementById('ajout_lieu_nomLieu').value
+                const rue = document.getElementById('ajout_lieu_rue').value
+                const latitude = document.getElementById('ajout_lieu_latitude').value
+
+                const longitude = document.getElementById('ajout_lieu_longitude').value
+
+                const lieu = {
+                    nomLieu: nomLieu,
+                    rue: rue,
+                    latitude: latitude,
+                    longitude: longitude,
+                    ville: villeSelected,
+                }
+                let selectedVille = villeSelect.value
+
+
+                await fetch('/addLieu', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(lieu)
+                    }
+                )
+                data = await getVilles()
+
+                getLieux(selectedVille, data)
+
+
+            })
+        })
+
+
+        async function getVilles() {
+            //**********************************
+            //Récupérer les données depuis la DB
+
+            const data = await fetch('/getVilles')
+            let villes = JSON.parse(await data.json())
+            console.log(villes);
+
+
+            //**********************************
+            //Afficher les villes dans le select
+
+            let villeSelect = document.getElementById("ville")
+            villeSelect.innerHTML = ''
+
+            villes.forEach(element => {
+                let option = document.createElement('option')
+                option.setAttribute('value', element.id)
+                option.innerHTML = element.nomVille
+                option.setAttribute('class', "villeOption")
+                villeSelect.appendChild(option)
+            })
+
+            return villes;
+        }
+
+
+        function getLieux(selectedVille, allVilles) {
+            let lieuxSelect = document.getElementById('lieu')
+            lieuxSelect.innerHTML = ''
+
+            //let lieux = []
+            const ville = allVilles.find(ville => ville.id == selectedVille); //<---------- TESTER TRIPLE EGAL
+
+
+            ville.lieux.forEach(elem => {
+                let option = document.createElement('option')
+                option.setAttribute('value', elem.id)
+                option.innerHTML = elem.nom;
+                lieuxSelect.appendChild(option)
+            })
+
+
+        }
+
+
+        //*******************
+
+        // let lieuxSelect = document.getElementById('lieu')
+        // //Afficher les lieux dans le select
+        // let lieux = []
+        // data.forEach(element => {
+        //     lieux.push(element.lieux)
+        // })
+        //
+        // console.log(lieux)
+
+        // lieux.forEach(lieu => {
+        //
+        //     if ((Object.keys(lieu).length) > 1) {
+        //         lieu.forEach(elem1 => {
+        //             console.log(elem1.nom)
+        //             if (elem1.villeId == selectedVille) {
+        //                 let option = document.createElement('option')
+        //                 option.setAttribute('value', elem1.id)
+        //                 option.innerHTML = elem1.nom
+        //                 lieuxSelect.appendChild(option)
+        //             }
+        //         })
+        //     } else {
+        //         console.log('oskour')
+        //         let id = Object.getOwnPropertyNames(lieu)[0]
+        //         console.log(lieu[id].nom)
+        //         if (lieu[id].villeId == selectedVille) {
+        //             let option = document.createElement('option')
+        //             option.setAttribute('value', lieu[id].id)
+        //             option.innerHTML = lieu[id].nom
+        //             lieuxSelect.appendChild(option)
+        //         }
+        //     }
+        //
+        // })
+    </script>
+{% endblock %}

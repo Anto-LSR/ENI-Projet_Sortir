@@ -5,13 +5,16 @@ namespace App\Controller;
 use App\Entity\Etat;
 use App\Entity\Lieu;
 use App\Entity\Sortie;
+use App\Entity\Ville;
 use App\Form\AjoutLieuType;
 use App\Form\CreationSortieType;
+use App\Form\ModifSortieType;
 use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +30,8 @@ class SortieController extends AbstractController
 
     private $sortieRepo;
 
-    function __construct(SortieRepository $sortieRepo){
+    function __construct(SortieRepository $sortieRepo)
+    {
         $this->sortieRepo = $sortieRepo;
     }
 
@@ -96,14 +100,16 @@ class SortieController extends AbstractController
     /**
      * @Route("/sortie/{id}", name="app_detailSortie", requirements={"id"="\d+"})
      */
-    public function afficherDetailSortie($id, SiteRepository $siteRepo, LieuRepository $lieuRepo):Response
+    public function afficherDetailSortie($id, SiteRepository $siteRepo, LieuRepository $lieuRepo, VilleRepository $villeRepo): Response
     {
         $sortie = $this->sortieRepo->find($id);
         $sites = $siteRepo->findAll();
         $lieux = $lieuRepo->findAll();
+        $villes = $villeRepo->findAll();
         //dd($sites);
         //dd($sortie);
-        return $this->render('sortie/detailSortie.html.twig', compact("sortie","sites", "lieux"));
+        //dd($lieux);
+        return $this->render('sortie/detailSortie.html.twig', compact("sortie", "sites", "lieux", "villes"));
     }
 
     /**
@@ -127,20 +133,20 @@ class SortieController extends AbstractController
             $idVille = $villes[$i]->getId();
 
             $k = 0;
-                for($j = 0; $j <= sizeof($lieux) -1; $j++){
-                    $lieu_ville = $lieux[$j]->getVille();
+            for ($j = 0; $j <= sizeof($lieux) - 1; $j++) {
+                $lieu_ville = $lieux[$j]->getVille();
 
-                    if($idVille == $lieu_ville->getId()){
+                if ($idVille == $lieu_ville->getId()) {
 
-                        $jsonVilles[$i]["lieux"][$k]["id"] = $lieux[$j]->getId();
-                        $jsonVilles[$i]["lieux"][$k]["nom"] = $lieux[$j]->getNomLieu();
-                        $jsonVilles[$i]["lieux"][$k]["rue"] = $lieux[$j]->getRue();
-                        $jsonVilles[$i]["lieux"][$k]["latitude"] = $lieux[$j]->getLatitude();
-                        $jsonVilles[$i]["lieux"][$k]["longitude"] = $lieux[$j]->getLongitude();
-                        $jsonVilles[$i]["lieux"][$k]["villeId"] = $villes[$i]->getId();
-                        $k++;
-                    }
+                    $jsonVilles[$i]["lieux"][$k]["id"] = $lieux[$j]->getId();
+                    $jsonVilles[$i]["lieux"][$k]["nom"] = $lieux[$j]->getNomLieu();
+                    $jsonVilles[$i]["lieux"][$k]["rue"] = $lieux[$j]->getRue();
+                    $jsonVilles[$i]["lieux"][$k]["latitude"] = $lieux[$j]->getLatitude();
+                    $jsonVilles[$i]["lieux"][$k]["longitude"] = $lieux[$j]->getLongitude();
+                    $jsonVilles[$i]["lieux"][$k]["villeId"] = $villes[$i]->getId();
+                    $k++;
                 }
+            }
         }
         $jsonContent = json_encode($jsonVilles);
         return $this->json($jsonContent);
@@ -149,7 +155,8 @@ class SortieController extends AbstractController
     /**
      * @Route("/addLieu", name="add_lieu")
      */
-    public function addLieu(Request $req, LieuRepository $lieuRepo, VilleRepository $villeRepo){
+    public function addLieu(Request $req, LieuRepository $lieuRepo, VilleRepository $villeRepo)
+    {
         $data = json_decode($req->getContent());
         $lieu = new Lieu();
         $ville = $villeRepo->find($data->ville);
@@ -162,4 +169,56 @@ class SortieController extends AbstractController
         $lieuRepo->add($lieu);
         return $this->json($req->getContent());
     }
+
+    /**
+     * @Route("/modifSortie/{id}", name="app_modifSortie", requirements={"id"="\d+"})
+     */
+    public function modifierSortie(Request $request, $id, EntityManager $em, SiteRepository $siteRepo, EtatRepository $etatRepo, LieuRepository $lieuRepo, VilleRepository $villeRepo): Response
+    {
+        $sortie = new Sortie();
+        $lieu = new Lieu();
+
+        $sortie = $this->sortieRepo->find($id);
+        $sites = $siteRepo->findAll();
+        $lieux = $lieuRepo->findAll();
+        $villes = $villeRepo->findAll();
+
+        $lieuForm = $this->createForm(AjoutLieuType::class, $lieu);
+        $modifSortieForm = $this->createForm(ModifSortieType::class, $sortie);
+
+        $lieuForm->handleRequest($request);
+        $modifSortieForm->handleRequest($request);
+
+        //Attribuer un état en fonction du bouton cliqué => Etat : Créée
+        if (($modifSortieForm->getClickedButton() === $modifSortieForm->get('Enregistrer')) && ($modifSortieForm->isValid() && $modifSortieForm->isSubmitted())) {
+            $etat = $etatRepo->find(1);
+            $sortie->setEtat($etat);
+            $em->persist($sortie);
+            $em->flush();
+            $this->addFlash("success", "Nouvelle sortie créée");
+        }
+
+        //Attribuer un état en fonction du bouton cliqué => Etat : Ouvert
+        if ($modifSortieForm->getClickedButton() === $modifSortieForm->get('Publier') && $modifSortieForm->isValid() && $modifSortieForm->isSubmitted()) {
+            $etat = $etatRepo->find(2);
+            $sortie->setEtat($etat);
+            $em->persist($sortie);
+            $em->flush();
+            $this->addFlash("success", "Sortie publiée");
+        }
+
+        //Supprime de la BDD ------------------- TODOTODOTODTODOTODOTODOTODOTODO
+        if ($modifSortieForm->getClickedButton() === $modifSortieForm->get('Supprimer') && $modifSortieForm->isValid() && $modifSortieForm->isSubmitted()){
+            $etat = $etatRepo->find(6);
+            $sortie->setEtat($etat);
+            $em->persist($sortie);
+            $em->flush();
+            $this->addFlash("success", "Sortie publiée");
+    }
+
+
+
+        return $this->render('sortie/modifierSortie.html.twig', ["modifSortieForm"=> $modifSortieForm->createView(), "lieuForm"=>$lieuForm->createView(), "sortie"=>$sortie]);
+    }
+
 }
