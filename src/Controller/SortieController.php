@@ -59,40 +59,29 @@ class SortieController extends AbstractController
         $sortie->setSite($idSite);
 
 
+        //Attribuer un état en fonction du bouton cliqué
+        if($sortieForm->isSubmitted() && $sortieForm->isValid()){
 
+            if ($sortieForm->getClickedButton() === $sortieForm->get('Enregistrer')) {
+                //dd($_POST);
+                $etat = $etatRepo->find(1);
+                $sortie->setEtat($etat);
+                $this->addFlash("success", "Nouvelle sortie créée");
+            } else if($sortieForm->getClickedButton() === $sortieForm->get('Publier')) {
 
+                $etat = $etatRepo->find(2);
+                $sortie->setEtat($etat);
+                $this->addFlash("success", "Sortie publiée");
+            }
 
-
-
-
-        //Attribuer un état en fonction du bouton cliqué => Etat : Créée
-        if (($sortieForm->getClickedButton() === $sortieForm->get('Enregistrer')) && ($sortieForm->isValid() && $sortieForm->isSubmitted())) {
-            //dd($_POST);
             $ville = $villeRepo->find($_POST["ville"]);
             $lieu = $lieuRepo->find($_POST["lieu"]);
             $lieu->setVille($ville);
             $sortie->setLieu($lieu);
-            $etat = $etatRepo->find(1);
-            $sortie->setEtat($etat);
             $em->persist($sortie);
             $em->flush();
-            $this->addFlash("success", "Nouvelle sortie créée");
+
         }
-
-        //Attribuer un état en fonction du bouton cliqué => Etat : Ouvert
-        if ($sortieForm->getClickedButton() === $sortieForm->get('Publier') && ($sortieForm->isValid() && $sortieForm->isSubmitted())) {
-            $ville = $villeRepo->find($_POST["ville"]);
-            $lieu = $lieuRepo->find($_POST["lieu"]);
-            $lieu->setVille($ville);
-            $sortie->setLieu($lieu);
-            $etat = $etatRepo->find(2);
-            $sortie->setEtat($etat);
-            $em->persist($sortie);
-            $em->flush();
-            $this->addFlash("success", "Sortie publiée");
-        }
-
-
 
         return $this->render('sortie/creationSortie.html.twig', ["sortieForm" => $sortieForm->createView(), "lieuForm" => $ajoutLieuForm->createView()]);
     }
@@ -182,7 +171,6 @@ class SortieController extends AbstractController
         $sites = $siteRepo->findAll();
         $lieux = $lieuRepo->findAll();
         $villes = $villeRepo->findAll();
-
 
         $lieuForm = $this->createForm(AjoutLieuType::class, $lieu);
         $modifSortieForm = $this->createForm(ModifSortieType::class, $sortie);
