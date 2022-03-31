@@ -6,9 +6,9 @@
 
     <div class="border p-4 mt-5 offset-3 col-6 rounded shadow">
         <div class="row text-center">
-            {% for messages in app.flashes %}
+            {% for label, messages in app.flashes %}
                 {% for message in messages %}
-                    <div class="alert alert-success">
+                    <div class="alert alert-{{ label }}">
                         {{ message }}
                     </div>
                 {% endfor %}

@@ -42,6 +42,7 @@ class SortieController extends AbstractController
      */
     public function creationSortie(Request $request, VilleRepository $villeRepo, LieuRepository $lieuRepo, EntityManagerInterface $em, SortieRepository $sortieRepo, EtatRepository $etatRepo): Response
     {
+
         $lieu = new Lieu();
         $ajoutLieuForm = $this->createForm(AjoutLieuType::class, $lieu);
         $ajoutLieuForm->handleRequest($request);
@@ -81,8 +82,8 @@ class SortieController extends AbstractController
             $lieu->setVille($ville);
             $sortie->setLieu($lieu);
 
-            $user = $this->getUser();
-            $sortie->addParticipant($user);
+//            $user = $this->getUser();
+//            $sortie->addParticipant($user);
 
             $em->persist($sortie);
             $em->flush();
@@ -250,11 +251,18 @@ class SortieController extends AbstractController
 
 
         $sortie = $this->sortieRepo->find($id);
+
+        if($sortie->isOpen()){
+
+
         $participant = $this->getUser();
 
         $sortie->addParticipant($participant);
         $em->flush();
         $this->addFlash("success", "Inscription confirmée");
+        } else {
+            $this->addFlash("danger", "Impossible de s'inscrire... petit malin 🤪");
+        }
 
         return $this->redirectToRoute("app_detailSortie", ['id' => $id]);
         //return $this->render('sortie/detailSortie.html.twig', compact('sortie', 'participant'));
