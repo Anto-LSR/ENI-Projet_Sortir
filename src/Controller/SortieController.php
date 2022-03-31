@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Etat;
 use App\Entity\Lieu;
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Form\AjoutLieuType;
@@ -11,6 +12,7 @@ use App\Form\CreationSortieType;
 use App\Form\ModifSortieType;
 use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
+use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
@@ -38,7 +40,7 @@ class SortieController extends AbstractController
     /**
      * @Route("/sortie", name="app_sortie")
      */
-    public function creationSortie(Request $request,VilleRepository $villeRepo, LieuRepository $lieuRepo,EntityManagerInterface $em, SortieRepository $sortieRepo, EtatRepository $etatRepo): Response
+    public function creationSortie(Request $request, VilleRepository $villeRepo, LieuRepository $lieuRepo, EntityManagerInterface $em, SortieRepository $sortieRepo, EtatRepository $etatRepo): Response
     {
         $lieu = new Lieu();
         $ajoutLieuForm = $this->createForm(AjoutLieuType::class, $lieu);
@@ -60,14 +62,14 @@ class SortieController extends AbstractController
 
 
         //Attribuer un état en fonction du bouton cliqué
-        if($sortieForm->isSubmitted() && $sortieForm->isValid()){
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
 
             if ($sortieForm->getClickedButton() === $sortieForm->get('Enregistrer')) {
                 //dd($_POST);
                 $etat = $etatRepo->find(1);
                 $sortie->setEtat($etat);
                 $this->addFlash("success", "Nouvelle sortie créée");
-            } else if($sortieForm->getClickedButton() === $sortieForm->get('Publier')) {
+            } else if ($sortieForm->getClickedButton() === $sortieForm->get('Publier')) {
 
                 $etat = $etatRepo->find(2);
                 $sortie->setEtat($etat);
@@ -78,6 +80,10 @@ class SortieController extends AbstractController
             $lieu = $lieuRepo->find($_POST["lieu"]);
             $lieu->setVille($ville);
             $sortie->setLieu($lieu);
+
+            $user = $this->getUser();
+            $sortie->addParticipant($user);
+
             $em->persist($sortie);
             $em->flush();
 
@@ -91,14 +97,38 @@ class SortieController extends AbstractController
      */
     public function afficherDetailSortie($id, SiteRepository $siteRepo, LieuRepository $lieuRepo, VilleRepository $villeRepo): Response
     {
+        $user = $this->getUser();
+        $canSubscribe = false;
+        $canUnsubscribe = false;
         $sortie = $this->sortieRepo->find($id);
+        $participants = $sortie->getParticipants();
+
+        foreach ($participants as $participant) {
+
+            if ($participant->getId() == $user->getId()) {
+
+                if ($sortie->getOrganisateur()->getId() != $user->getId()) {
+                    $canUnsubscribe = true;
+                    $canSubscribe = false;
+                }
+            }
+        }
+        if ($canUnsubscribe == false && $user->getId() != $sortie->getOrganisateur()->getId()){
+            $canSubscribe = true;
+        }
+
+
+
+        // dd($canUnsubscribe, $canSubscribe);
+
+
         $sites = $siteRepo->findAll();
         $lieux = $lieuRepo->findAll();
         $villes = $villeRepo->findAll();
         //dd($sites);
         //dd($sortie);
         //dd($lieux);
-        return $this->render('sortie/detailSortie.html.twig', compact("sortie", "sites", "lieux", "villes"));
+        return $this->render('sortie/detailSortie.html.twig', compact("sortie", "sites", "lieux", "villes", "canSubscribe", "canUnsubscribe"));
     }
 
     /**
@@ -182,11 +212,11 @@ class SortieController extends AbstractController
         if (($modifSortieForm->isSubmitted() && $modifSortieForm->isValid())) {
             $etat = $etatRepo->find(1);
             //dd($sortie->getOrganisateur());
-            if($modifSortieForm->getClickedButton() === $modifSortieForm->get('Enregistrer')){
+            if ($modifSortieForm->getClickedButton() === $modifSortieForm->get('Enregistrer')) {
                 $etat = $etatRepo->find(1);
                 $sortie->setEtat($etat);
                 $this->addFlash("success", "Sortie modifiée avec succès");
-            } else if ($modifSortieForm->getClickedButton() === $modifSortieForm->get('Publier')){
+            } else if ($modifSortieForm->getClickedButton() === $modifSortieForm->get('Publier')) {
                 $etat = $etatRepo->find(2);
                 $sortie->setEtat($etat);
                 $this->addFlash("success", "Sortie publiée");
@@ -199,20 +229,53 @@ class SortieController extends AbstractController
 
         }
 
-
-
         //Supprime de la BDD ------------------- TODOTODOTODTODOTODOTODOTODOTODO
-        if ($modifSortieForm->getClickedButton() === $modifSortieForm->get('Supprimer') && $modifSortieForm->isValid() && $modifSortieForm->isSubmitted()){
+        if ($modifSortieForm->getClickedButton() === $modifSortieForm->get('Supprimer') && $modifSortieForm->isValid() && $modifSortieForm->isSubmitted()) {
             $etat = $etatRepo->find(6);
             $sortie->setEtat($etat);
 
             $em->flush();
             $this->addFlash("success", "Sortie publiée");
+        }
+
+
+        return $this->render('sortie/modifierSortie.html.twig', ["modifSortieForm" => $modifSortieForm->createView(), "lieuForm" => $lieuForm->createView(), "sortie" => $sortie]);
     }
 
+    /**
+     * @Route("/inscriptionSortie/{id}", name="inscription_sortie", requirements={"id"="\d+"})
+     */
+    public function inscriptionSortie($id, ParticipantRepository $partRepo, EntityManagerInterface $em): Response
+    {
 
 
-        return $this->render('sortie/modifierSortie.html.twig', ["modifSortieForm"=> $modifSortieForm->createView(), "lieuForm"=>$lieuForm->createView(), "sortie"=>$sortie]);
+        $sortie = $this->sortieRepo->find($id);
+        $participant = $this->getUser();
+
+        $sortie->addParticipant($participant);
+        $em->flush();
+        $this->addFlash("success", "Inscription confirmée");
+
+        return $this->redirectToRoute("app_detailSortie", ['id' => $id]);
+        //return $this->render('sortie/detailSortie.html.twig', compact('sortie', 'participant'));
+    }
+
+    /**
+     * @Route("/desinscriptionSortie/{id}", name="desinscription_sortie", requirements={"id"="\d+"})
+     */
+    public function desinscriptionSortie($id, ParticipantRepository $partRepo, EntityManagerInterface $em): Response
+    {
+
+        $sortie = $this->sortieRepo->find($id);
+        $participant = $this->getUser();
+
+        //dd($sortie->getParticipants()[0]);
+        $sortie->removeParticipant($participant);
+        $em->flush();
+        $this->addFlash("success", "Désistement confirmé");
+
+        return $this->redirectToRoute("app_detailSortie", ['id' => $id]);
+        //return $this->render('sortie/detailSortie.html.twig', compact('sortie', 'participant'));
     }
 
 }

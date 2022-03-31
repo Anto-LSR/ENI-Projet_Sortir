@@ -14,7 +14,7 @@
             <th>Etat</th>
             <th>Inscrit</th>
             <th>Organisateur</th>
-            <th>Actions</th>
+            <th>Informations</th>
         </thead>
         <tbody>
         {% for sortie in sorties %}
@@ -30,7 +30,9 @@
                            <td>{{ sortie.etat.libelle }}</td>
                            <td>TODO</td>
                            <td><a href="{{path('app_profil',{id:sortie.organisateur.id})}}">{{sortie.organisateur.pseudo}}</a></td>
-                           <td>ACTIONS</td>
+
+
+                            <td><a href="{{path('app_detailSortie',{id:sortie.id})}}">Détails</a></td>
 
                         </tr>
                     {% endif %}
