@@ -6,6 +6,7 @@ use App\Entity\Participant;
 use App\Form\ModifProfilType;
 use App\Form\UpdatePasswordType;
 use App\Repository\ParticipantRepository;
+use App\Repository\SiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,13 +16,30 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
+    private $partRepo;
+
     function __construct(ParticipantRepository $partRepo)// injection de dépendances
     {
         $this->partRepo = $partRepo;
     }
 
+
     /**
-     * @Route("/profil", name="app_profil")
+     * @Route("/profil/{id}", name="app_profil", requirements={"id"="\d+"})
+     */
+    public function afficherProfil($id, SiteRepository $siteRepo):Response
+    {
+
+     $participant = $this->partRepo->find($id);
+     $site = $siteRepo->findAll();
+     //dd($participant);
+
+
+     return $this->render('user/afficherProfil.html.twig', compact("participant", "site"));
+    }
+
+    /**
+     * @Route("/monProfil", name="app_monProfil")
      */
     public function profil(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher): Response
     {
@@ -48,7 +66,7 @@ class UserController extends AbstractController
 
 
                 $this->addFlash("danger", "Votre mot de passe est incorrect");
-                return $this->redirectToRoute('app_profil');
+                return $this->redirectToRoute('app_monProfil');
 
 
             }
@@ -59,7 +77,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/profil/changer-motdepasse", name="app_updatePW")
+     * @Route("/monProfil/changer-motdepasse", name="app_updatePW")
      */
     public function updatePassword(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $em, ParticipantRepository $pr): Response
     {

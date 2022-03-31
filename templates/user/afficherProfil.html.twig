@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil de {{participant.pseudo}}{% endblock %}
+
+{% block body %}
+
+    <div class="border p-4 mt-5 offset-3 col-5 rounded shadow">
+        <div><h3 class="text-center mb-5 mt-2">{{ participant.pseudo }}</h3></div>
+
+            <div class="">
+                <p>Pseudo : {{ participant.pseudo }}</p>
+                <p>Prénom : {{ participant.prenom }}</p>
+                <p>Nom : {{ participant.nom }}</p>
+                {% if ( participant.telephone == null )%}
+                    <p>Téléphone : Non renseigné</p>
+                {% else %}
+                    <p>Téléphone : {{ participant.telephone }}</p>
+                {% endif %}
+
+                <p>Email : {{ participant.email }}</p>
+                <p>Site de rattachement : {{ participant.site.nomSite }}</p>
+
+                <a class="btn btn-primary offset-4 col-4 mt-3" href="{{ path('app_main') }}">Retour</a>
+            </div>
+    </div>
+
+
+
+{% endblock %}

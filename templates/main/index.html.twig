@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MainController!{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
 
@@ -29,7 +29,7 @@
                            <td>0/{{ sortie.nbInscriptionsMax }}</td>
                            <td>{{ sortie.etat.libelle }}</td>
                            <td>TODO</td>
-                           <td><a href="#">{{ parti.pseudo}}</a></td>
+                           <td><a href="{{path('app_profil',{id:sortie.organisateur.id})}}">{{sortie.organisateur.pseudo}}</a></td>
                            <td>ACTIONS</td>
 
                         </tr>
