@@ -16,7 +16,7 @@
         {{ form_row(modifMDPForm.plainPassword) }}
         <div class="button_row d-flex mt-5  justify-content-around">
         {{ form_row(modifMDPForm.submit) }}
-            <a href="/profil">{{ form_row(modifMDPForm.Annuler) }}</a>
+            <a href="{{path('app_monProfil')}}">{{ form_row(modifMDPForm.Annuler) }}</a>
         </div>
     </div>
 {% endblock %}
