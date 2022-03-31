@@ -23,13 +23,17 @@
                     {% if(sortie.etat.id != 1) %}
 
                         <tr >
-                           <td><a href="{{path('app_detailSortie',{id:sortie.id})}}">{{ sortie.nom }}</a></td>
+                           <td><h5>{{ sortie.nom |capitalize }}</h5></td>
                            <td>{{ sortie.dateHeureDebut|date("d/m/Y")  }}</td>
                            <td>{{ sortie.dateLimiteInscription|date("d/m/Y") }}</td>
-                           <td>0/{{ sortie.nbInscriptionsMax }}</td>
+                           <td>{{ sortie.participants|length }}/{{ sortie.nbInscriptionsMax }}</td>
                            <td>{{ sortie.etat.libelle }}</td>
-                           <td>TODO</td>
-                           <td><a href="{{path('app_profil',{id:sortie.organisateur.id})}}">{{sortie.organisateur.pseudo}}</a></td>
+                            {% if app.user in sortie.participants %}
+                           <td>✔</td>
+                                {% else %}
+                                    <td>✖</td>
+                                    {% endif %}
+                           <td><a href="{{path('app_profil',{id:sortie.organisateur.id})}}">{{sortie.organisateur.pseudo |capitalize}}</a></td>
 
 
                             <td><a href="{{path('app_detailSortie',{id:sortie.id})}}">Détails</a></td>

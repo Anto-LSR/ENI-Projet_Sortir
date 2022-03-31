@@ -1,3 +1,7 @@
+a{
+    color: #68c7de;
+}
+
 .navbar-collapse{
     flex-grow: 0 !important;
 }

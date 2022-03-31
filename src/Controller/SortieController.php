@@ -114,10 +114,9 @@ class SortieController extends AbstractController
                 }
             }
         }
-        if ($canUnsubscribe == false && $user->getId() != $sortie->getOrganisateur()->getId()){
+        if ($canUnsubscribe == false && $user->getId() != $sortie->getOrganisateur()->getId()) {
             $canSubscribe = true;
         }
-
 
 
         // dd($canUnsubscribe, $canSubscribe);
@@ -252,20 +251,14 @@ class SortieController extends AbstractController
 
         $sortie = $this->sortieRepo->find($id);
 
-        if($sortie->isOpen()){
 
+            $participant = $this->getUser();
+            $sortie->addParticipant($participant);
+            $em->flush();
+            $this->addFlash("success", "Inscription confirmée");
 
-        $participant = $this->getUser();
-
-        $sortie->addParticipant($participant);
-        $em->flush();
-        $this->addFlash("success", "Inscription confirmée");
-        } else {
-            $this->addFlash("danger", "Impossible de s'inscrire... petit malin 🤪");
-        }
 
         return $this->redirectToRoute("app_detailSortie", ['id' => $id]);
-        //return $this->render('sortie/detailSortie.html.twig', compact('sortie', 'participant'));
     }
 
     /**
@@ -283,7 +276,6 @@ class SortieController extends AbstractController
         $this->addFlash("success", "Désistement confirmé");
 
         return $this->redirectToRoute("app_detailSortie", ['id' => $id]);
-        //return $this->render('sortie/detailSortie.html.twig', compact('sortie', 'participant'));
     }
 
 }
