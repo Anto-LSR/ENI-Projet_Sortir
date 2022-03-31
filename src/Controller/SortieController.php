@@ -9,6 +9,7 @@ use App\Form\AjoutLieuType;
 use App\Form\CreationSortieType;
 use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
+use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,6 +24,13 @@ use Symfony\Component\Serializer\Serializer;
 
 class SortieController extends AbstractController
 {
+
+    private $sortieRepo;
+
+    function __construct(SortieRepository $sortieRepo){
+        $this->sortieRepo = $sortieRepo;
+    }
+
     /**
      * @Route("/sortie", name="app_sortie")
      */
@@ -83,6 +91,19 @@ class SortieController extends AbstractController
 
 
         return $this->render('sortie/creationSortie.html.twig', ["sortieForm" => $sortieForm->createView(), "lieuForm" => $ajoutLieuForm->createView()]);
+    }
+
+    /**
+     * @Route("/sortie/{id}", name="app_detailSortie", requirements={"id"="\d+"})
+     */
+    public function afficherDetailSortie($id, SiteRepository $siteRepo, LieuRepository $lieuRepo):Response
+    {
+        $sortie = $this->sortieRepo->find($id);
+        $sites = $siteRepo->findAll();
+        $lieux = $lieuRepo->findAll();
+        //dd($sites);
+        //dd($sortie);
+        return $this->render('sortie/detailSortie.html.twig', compact("sortie","sites", "lieux"));
     }
 
     /**
