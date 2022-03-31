@@ -26,8 +26,12 @@ class SortieController extends AbstractController
     /**
      * @Route("/sortie", name="app_sortie")
      */
-    public function creationSortie(Request $request, EntityManagerInterface $em, SortieRepository $sortieRepo, EtatRepository $etatRepo): Response
+    public function creationSortie(Request $request,VilleRepository $villeRepo, LieuRepository $lieuRepo,EntityManagerInterface $em, SortieRepository $sortieRepo, EtatRepository $etatRepo): Response
     {
+        $lieu = new Lieu();
+        $ajoutLieuForm = $this->createForm(AjoutLieuType::class, $lieu);
+        $ajoutLieuForm->handleRequest($request);
+
         $sortie = new Sortie();
 
         $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
@@ -42,8 +46,20 @@ class SortieController extends AbstractController
         $idSite = $this->getUser()->getSite();
         $sortie->setSite($idSite);
 
+
+
+
+
+
+
+
         //Attribuer un état en fonction du bouton cliqué => Etat : Créée
         if (($sortieForm->getClickedButton() === $sortieForm->get('Enregistrer')) && ($sortieForm->isValid() && $sortieForm->isSubmitted())) {
+            //dd($_POST);
+            $ville = $villeRepo->find($_POST["ville"]);
+            $lieu = $lieuRepo->find($_POST["lieu"]);
+            $lieu->setVille($ville);
+            $sortie->setLieu($lieu);
             $etat = $etatRepo->find(1);
             $sortie->setEtat($etat);
             $em->persist($sortie);
@@ -53,15 +69,17 @@ class SortieController extends AbstractController
 
         //Attribuer un état en fonction du bouton cliqué => Etat : Ouvert
         if ($sortieForm->getClickedButton() === $sortieForm->get('Publier')) {
+            $ville = $villeRepo->find($_POST["ville"]);
+            $lieu = $lieuRepo->find($_POST["lieu"]);
+            $lieu->setVille($ville);
+            $sortie->setLieu($lieu);
             $etat = $etatRepo->find(2);
             $sortie->setEtat($etat);
             $em->persist($sortie);
             $em->flush();
             $this->addFlash("success", "Sortie publiée");
         }
-        $lieu = new Lieu();
-        $ajoutLieuForm = $this->createForm(AjoutLieuType::class, $lieu);
-        $ajoutLieuForm->handleRequest($request);
+
 
 
         return $this->render('sortie/creationSortie.html.twig', ["sortieForm" => $sortieForm->createView(), "lieuForm" => $ajoutLieuForm->createView()]);

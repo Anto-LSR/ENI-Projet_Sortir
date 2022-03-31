@@ -7,6 +7,7 @@ use App\Entity\Sortie;
 use App\Entity\Ville;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -41,17 +42,9 @@ class CreationSortieType extends AbstractType
             ->add('nbInscriptionsMax', IntegerType::class,['label' => "Nombre d'inscriptions maximum *"])
             ->add('infoSortie')
             ->add('urlPhoto')
-//            ->add('ville', EntityType::class, [
-//                'class' => Ville::class,
-//                'choice_label' => 'nomVille'
-//            ])
-//            ->add('lieu',EntityType::class,[
-//                'class' => Lieu::class,
-//                'choice_label' => 'nomLieu',
-//                'label' => "Lieu *"])
             ->add('Enregistrer',SubmitType::class)
             ->add('Publier',SubmitType::class)
-            //->add('Annuler',SubmitType::class)
+
 
         ;
     }
