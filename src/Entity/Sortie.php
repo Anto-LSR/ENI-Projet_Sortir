@@ -295,6 +295,10 @@ class Sortie
             $isOpen = false;
         }
 
+        if($this->getEtat()->getId() == 3 || $this->getEtat()->getId() == 6 ||$this->getEtat()->getId() == 5){
+            $isOpen = false;
+        }
+
 
         return $isOpen;
     }

@@ -100,6 +100,7 @@ class SortieController extends AbstractController
         $canSubscribe = false;
         $canUnsubscribe = false;
         $eventStarted = false;
+        $showCancelBtn = false;
         $now = new \DateTime();
         $impossibleSubscription  = false;
         $sortie = $this->sortieRepo->find($id);
@@ -127,13 +128,17 @@ class SortieController extends AbstractController
             $impossibleSubscription = true;
         }
 
+        if($sortie->getDateHeureDebut() > $now){
+            $showCancelBtn = true;
+        }
+
         $sites = $siteRepo->findAll();
         $lieux = $lieuRepo->findAll();
         $villes = $villeRepo->findAll();
         //dd($sites);
         //dd($sortie);
         //dd($lieux);
-        return $this->render('sortie/detailSortie.html.twig', compact("sortie", "sites", "lieux", "villes", "canSubscribe", "canUnsubscribe", "impossibleSubscription","eventStarted"));
+        return $this->render('sortie/detailSortie.html.twig', compact("sortie", "sites", "lieux", "villes", "canSubscribe", "canUnsubscribe", "impossibleSubscription","eventStarted", "showCancelBtn"));
     }
 
     /**
@@ -299,7 +304,8 @@ class SortieController extends AbstractController
      */
     public function annulationSortie($id,  EntityManagerInterface $em, SortieRepository $sortieRepo): Response{
         $sortie = $sortieRepo->find($id);
-        if($this->getUser() == $sortie->getOrganisateur()){
+        $now = new \DateTime();
+        if($this->getUser() == $sortie->getOrganisateur() && $sortie->getDateHeureDebut() > $now){
 
             return $this->render('sortie/annulerSortie.html.twig', compact("sortie"));
 
@@ -308,7 +314,34 @@ class SortieController extends AbstractController
         }
        return true;
     }
+    /**
+     * @Route("/supprimerSortie/confirm/{id}", name="annulation_sortie_confirm", requirements={"id"="\d+"})
+     */
+    public function confirmerAnnulationSortie($id,  EntityManagerInterface $em, SortieRepository $sortieRepo, EtatRepository $etatRepo): Response
+    {
+        $now = new \DateTime();
+        $sortie = $sortieRepo->find($id);
+        if($this->getUser() == $sortie->getOrganisateur() && $sortie->getDateHeureDebut() > $now){
+            if($sortie->getEtat()->getId() == '2'){
+                $sortie->setMotifAnnulation($_POST["motif"]);
+                $etat = $etatRepo->find(6);
+                $sortie->setEtat($etat);
+                $em->flush();
+                $this->addFlash("success", "Sortie annulée");
+                return $this->redirectToRoute("app_detailSortie", ['id' => $id]);
+            } else if($sortie->getEtat()->getId() == '1'){
+                $sortieRepo->remove($sortie);
+                $em->flush();
+                $this->addFlash("success", "Sortie supprimée");
+                return $this->redirectToRoute("app_main");
+            }
 
 
 
-}
+        } else {
+            $this->redirectToRoute("app_main");
+        }
+        return true;
+    }
+
+    }
