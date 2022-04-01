@@ -99,6 +99,8 @@ class SortieController extends AbstractController
         $user = $this->getUser();
         $canSubscribe = false;
         $canUnsubscribe = false;
+        $eventStarted = false;
+        $now = new \DateTime();
         $impossibleSubscription  = false;
         $sortie = $this->sortieRepo->find($id);
         $participants = $sortie->getParticipants();
@@ -117,15 +119,16 @@ class SortieController extends AbstractController
             $canSubscribe = true;
         }
 
+
+        if($sortie->getDateHeureDebut() < $now){
+            $eventStarted = true;
+        }
+
         if(!$sortie->isOpen()){
 
             $canSubscribe  = false;
             $impossibleSubscription = true;
         }
-
-
-
-
 
         $sites = $siteRepo->findAll();
         $lieux = $lieuRepo->findAll();
@@ -133,7 +136,7 @@ class SortieController extends AbstractController
         //dd($sites);
         //dd($sortie);
         //dd($lieux);
-        return $this->render('sortie/detailSortie.html.twig', compact("sortie", "sites", "lieux", "villes", "canSubscribe", "canUnsubscribe", "impossibleSubscription"));
+        return $this->render('sortie/detailSortie.html.twig', compact("sortie", "sites", "lieux", "villes", "canSubscribe", "canUnsubscribe", "impossibleSubscription","eventStarted"));
     }
 
     /**

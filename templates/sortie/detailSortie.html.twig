@@ -43,14 +43,16 @@
             </div>
             <a class="btn btn-primary offset-4 col-4 mt-3" href="{{ path('app_main') }}">Retour</a>
 
-            {% if canSubscribe == 1 %}
-            <a class="btn btn-primary offset-4 col-4 mt-3"
-               href="{{ path('inscription_sortie', {id:sortie.id}) }}">S'inscrire</a>
-            {% endif %}
+            {% if eventStarted == 0 %}
+                {% if canSubscribe == 1 %}
+                    <a class="btn btn-primary offset-4 col-4 mt-3"
+                       href="{{ path('inscription_sortie', {id:sortie.id}) }}">S'inscrire</a>
+                {% endif %}
 
-            {% if canUnsubscribe == 1 %}
-            <a class="btn btn-primary offset-4 col-4 mt-3"
-               href="{{ path('desinscription_sortie', {id:sortie.id}) }}">Se désister</a>
+                {% if canUnsubscribe == 1 %}
+                    <a class="btn btn-primary offset-4 col-4 mt-3"
+                       href="{{ path('desinscription_sortie', {id:sortie.id}) }}">Se désister</a>
+                {% endif %}
             {% endif %}
 
             {% if impossibleSubscription == 1 %}

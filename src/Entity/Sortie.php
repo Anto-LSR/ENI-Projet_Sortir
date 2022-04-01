@@ -279,6 +279,7 @@ class Sortie
         $now = new \DateTime();
 
         foreach ($this->getParticipants() as $participant) {
+            //dd($participant);
             $nbParticipants++;
         }
         if ($this->getNbInscriptionsMax() == $nbParticipants) {
@@ -297,6 +298,16 @@ class Sortie
 
         return $isOpen;
     }
+
+//    public function desistement(){
+//        $now = new \DateTime();
+//        $desistementPossible = false;
+//
+//        if($this->dateHeureDebut < $now){
+//            $desistementPossible = true;
+//
+//        }
+//    }
 
 
 }
