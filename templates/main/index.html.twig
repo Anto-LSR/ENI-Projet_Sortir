@@ -31,7 +31,7 @@
                             {% if app.user in sortie.participants %}
                            <td>✔</td>
                                 {% else %}
-                                    <td>✖</td>
+                                    <td></td>
                                     {% endif %}
                            <td><a href="{{path('app_profil',{id:sortie.organisateur.id})}}">{{sortie.organisateur.pseudo |capitalize}}</a></td>
 

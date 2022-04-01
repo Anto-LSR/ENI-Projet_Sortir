@@ -48,9 +48,7 @@ class SortieController extends AbstractController
         $ajoutLieuForm->handleRequest($request);
 
         $sortie = new Sortie();
-
         $sortieForm = $this->createForm(CreationSortieType::class, $sortie);
-
         $sortieForm->handleRequest($request);
 
         //On hydrate l'id organisateur avec l'id de l'utilisateur connecté
@@ -101,6 +99,7 @@ class SortieController extends AbstractController
         $user = $this->getUser();
         $canSubscribe = false;
         $canUnsubscribe = false;
+        $impossibleSubscription  = false;
         $sortie = $this->sortieRepo->find($id);
         $participants = $sortie->getParticipants();
 
@@ -118,8 +117,14 @@ class SortieController extends AbstractController
             $canSubscribe = true;
         }
 
+        if(!$sortie->isOpen()){
 
-        // dd($canUnsubscribe, $canSubscribe);
+            $canSubscribe  = false;
+            $impossibleSubscription = true;
+        }
+
+
+
 
 
         $sites = $siteRepo->findAll();
@@ -128,7 +133,7 @@ class SortieController extends AbstractController
         //dd($sites);
         //dd($sortie);
         //dd($lieux);
-        return $this->render('sortie/detailSortie.html.twig', compact("sortie", "sites", "lieux", "villes", "canSubscribe", "canUnsubscribe"));
+        return $this->render('sortie/detailSortie.html.twig', compact("sortie", "sites", "lieux", "villes", "canSubscribe", "canUnsubscribe", "impossibleSubscription"));
     }
 
     /**
@@ -250,12 +255,16 @@ class SortieController extends AbstractController
 
 
         $sortie = $this->sortieRepo->find($id);
+            if($sortie->isOpen()){
+                $participant = $this->getUser();
+                $sortie->addParticipant($participant);
+                $em->flush();
+                $this->addFlash("success", "Inscription confirmée");
+            } else {
+                $this->addFlash("danger", "Inscription impossible");
+            }
 
 
-            $participant = $this->getUser();
-            $sortie->addParticipant($participant);
-            $em->flush();
-            $this->addFlash("success", "Inscription confirmée");
 
 
         return $this->redirectToRoute("app_detailSortie", ['id' => $id]);

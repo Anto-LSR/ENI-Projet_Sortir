@@ -271,25 +271,32 @@ class Sortie
 
         return $this;
     }
-    public function isOpen(){
+
+    public function isOpen()
+    {
         $isOpen = true;
         $nbParticipants = 0;
         $now = new \DateTime();
-        $i = 0;
-        foreach ($this->getParticipants() as $participant){
-            $i++;
+
+        foreach ($this->getParticipants() as $participant) {
+            $nbParticipants++;
         }
-        if($this->getNbInscriptionsMax() == $i){
+        if ($this->getNbInscriptionsMax() == $nbParticipants) {
             $isOpen = false;
         }
 
-        if($this->dateHeureDebut > $now ){
+
+        if ($this->dateHeureDebut < $now) {
             $isOpen = false;
         }
 
-        if($this->dateLimiteInscription > $now){
+        if ($this->dateLimiteInscription < $now) {
             $isOpen = false;
         }
+
+
         return $isOpen;
     }
+
+
 }

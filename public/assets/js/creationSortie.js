@@ -17,6 +17,7 @@
 
         const addBtn = document.getElementById('addLieuBtn')
         addBtn.addEventListener('click', async (e) => {
+            console.log('coucou');
             const villeSelected = document.getElementById('ajout_lieu_ville').value
             const nomLieu = document.getElementById('ajout_lieu_nomLieu').value
             const rue = document.getElementById('ajout_lieu_rue').value
