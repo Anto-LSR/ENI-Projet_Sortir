@@ -105,17 +105,14 @@ class SortieController extends AbstractController
         $sortie = $this->sortieRepo->find($id);
         $participants = $sortie->getParticipants();
 
-        foreach ($participants as $participant) {
 
-            if ($participant->getId() == $user->getId()) {
-
-                if ($sortie->getOrganisateur()->getId() != $user->getId()) {
-                    $canUnsubscribe = true;
-                    $canSubscribe = false;
-                }
+        foreach ($participants as $participant){
+            if($participant == $this->getUser()){
+                $canUnsubscribe = true;
             }
         }
-        if ($canUnsubscribe == false && $user->getId() != $sortie->getOrganisateur()->getId()) {
+
+        if ($canUnsubscribe == false ){
             $canSubscribe = true;
         }
 
@@ -278,14 +275,21 @@ class SortieController extends AbstractController
      */
     public function desinscriptionSortie($id, ParticipantRepository $partRepo, EntityManagerInterface $em): Response
     {
-
+        $now = new \DateTime();
         $sortie = $this->sortieRepo->find($id);
         $participant = $this->getUser();
+        //dd($sortie->getDateHeureDebut());
+        if($sortie->getDateHeureDebut() > $now){
 
-        //dd($sortie->getParticipants()[0]);
-        $sortie->removeParticipant($participant);
-        $em->flush();
-        $this->addFlash("success", "Désistement confirmé");
+            //dd($sortie->getParticipants()[0]);
+            $sortie->removeParticipant($participant);
+            $em->flush();
+            $this->addFlash("success", "Désistement confirmé");
+        } else{
+
+            $this->addFlash("danger", "Désistement impossible");
+        }
+
 
         return $this->redirectToRoute("app_detailSortie", ['id' => $id]);
     }
