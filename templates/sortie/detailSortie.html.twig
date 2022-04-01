@@ -66,7 +66,7 @@
             {% endif %}
 
 
-            {% if (app.user.id == sortie.organisateur.id) %}
+            {% if (app.user.id == sortie.organisateur.id and sortie.etat.id != 6 and sortie.etat.id != 3) %}
                 <a class="btn btn-primary offset-4 col-4 mt-3" href="{{ path('app_modifSortie', {id:sortie.id}) }}">Modifier</a>
             {% endif %}
             {% if not app.user in sortie.participants %}
