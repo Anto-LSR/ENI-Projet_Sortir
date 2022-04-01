@@ -295,7 +295,7 @@ class Sortie
             $isOpen = false;
         }
 
-        if($this->getEtat()->getId() == 3 || $this->getEtat()->getId() == 6 ||$this->getEtat()->getId() == 5){
+        if($this->getEtat()->getId() == 3 || $this->getEtat()->getId() == 6 ||$this->getEtat()->getId() == 5 ||$this->getEtat()->getId() == 4){
             $isOpen = false;
         }
 

@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Sortie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -46,11 +45,15 @@ class SortieRepository extends ServiceEntityRepository
         }
     }
 
-    public function selectByFilters(EntityManagerInterface $em, $recherche, $site, $dateDebut, $dateFin, $jeSuisOrganisateur, $jeSuisInscrit, $jeSuisPasInscrit)
+    public function selectByFilters($recherche, $site, $dateDebut, $dateFin, $jeSuisOrganisateur, $jeSuisInscrit, $jeSuisPasInscrit)
     {
-        //TODO*****************
+        //TODO**   CI DESSOUS UN EXEMPLE DE FILTRE, LE RESTE DEMERDEZ VOUS
 
-
+        $qb = $this->createQueryBuilder('s');
+        $qb->join("s.organisateur", "o")
+            ->andWhere('o.site = :site')
+            ->setParameter('site', $site);
+        return $qb->getQuery()->getResult();
     }
 
     // /**
