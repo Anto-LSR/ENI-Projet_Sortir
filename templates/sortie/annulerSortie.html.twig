@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ sortie.nom }}{% endblock %}
+
+{% block body %}
+
+    <div class="border p-4 mt-5 offset-3 col-6 rounded shadow">
+        <div class="row text-center">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <div>
+            <h3 class="text-center mb-2 mt-2">{{ sortie.nom }}</h3>
+        </div>
+
+
+        <div>
+            <h6 class="text-center mb-5">Organisée par <strong>{{ sortie.organisateur.pseudo }}</strong></h6>
+        </div>
+
+        <div class="row">
+            <form action="" method="POST">
+
+                <div class="mb-3">
+                    <label for="motif" class="form-label">Motif d'annulation :</label>
+                    <textarea class="form-control" id="motif" rows="3"></textarea>
+                </div>
+                {% if sortie.organisateur.id == app.user.id %}
+                    <button type="submit" class="btn btn-danger offset-4 col-4 mt-5"
+                    >❌ Supprimer la sortie
+                    </button>
+
+                {% endif %}
+            </form>
+            <a class="btn btn-primary offset-4 col-4 mt-3" href="{{ path('app_main') }}">Retour</a>
+        </div>
+
+        <div></div>
+        <div></div>
+    </div>
+
+
+
+{% endblock %}

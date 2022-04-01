@@ -294,4 +294,21 @@ class SortieController extends AbstractController
         return $this->redirectToRoute("app_detailSortie", ['id' => $id]);
     }
 
+    /**
+     * @Route("/supprimerSortie/{id}", name="annulation_sortie", requirements={"id"="\d+"})
+     */
+    public function annulationSortie($id,  EntityManagerInterface $em, SortieRepository $sortieRepo): Response{
+        $sortie = $sortieRepo->find($id);
+        if($this->getUser() == $sortie->getOrganisateur()){
+
+            return $this->render('sortie/annulerSortie.html.twig', compact("sortie"));
+
+        } else {
+            $this->redirectToRoute("app_main");
+        }
+       return true;
+    }
+
+
+
 }

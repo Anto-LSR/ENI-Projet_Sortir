@@ -55,11 +55,16 @@
                 {% endif %}
             {% endif %}
 
+
+            {% if (app.user.id == sortie.organisateur.id) %}
+                <a class="btn btn-primary offset-4 col-4 mt-3" href="{{ path('app_modifSortie', {id:sortie.id}) }}">Modifier</a>
+            {% endif %}
             {% if impossibleSubscription == 1 %}
                 <button class="btn btn-secondary offset-4 col-4 mt-3">Inscription impossible</button>
             {% endif %}
-            {% if (app.user.id == sortie.organisateur.id) %}
-                <a class="btn btn-primary offset-4 col-4 mt-3" href="{{ path('app_modifSortie', {id:sortie.id}) }}">Modifier</a>
+            {% if sortie.organisateur.id == app.user.id %}
+                <a class="btn btn-danger offset-4 col-4 mt-5"
+                   href="{{ path('annulation_sortie', {id:sortie.id}) }}">❌ Supprimer la sortie </a>
             {% endif %}
         </div>
 
