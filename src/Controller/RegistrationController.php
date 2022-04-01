@@ -20,11 +20,11 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         //VERIFICATION ACCES AU REGISTER
-//        if(!$this->getUser()){
-//            return $this->redirectToRoute('app_login');
-//        }else if($this->getUser()->getAdministrateur() == false ){
-//            return $this->redirectToRoute('app_login');
-//        }
+        if(!$this->getUser()){
+            return $this->redirectToRoute('app_login');
+        }else if($this->getUser()->getAdministrateur() == false ){
+            return $this->redirectToRoute('app_login');
+        }
         //*******************************
         $user = new Participant();
         $form = $this->createForm(RegistrationFormType::class, $user);

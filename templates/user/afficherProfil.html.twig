@@ -1,17 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profil de {{participant.pseudo}}{% endblock %}
+{% block title %}Profil de {{ participant.pseudo }}{% endblock %}
 
 {% block body %}
 
-    <div class="border p-4 mt-5 offset-3 col-5 rounded shadow">
-        <div><h3 class="text-center mb-5 mt-2">{{ participant.pseudo }}</h3></div>
+    {% if peutConsulterProfil == 1 %}
+        <div class="border p-4 mt-5 offset-3 col-5 rounded shadow">
+            <div><h3 class="text-center mb-5 mt-2">{{ participant.pseudo }}</h3></div>
 
             <div class="">
                 <p>Pseudo : {{ participant.pseudo }}</p>
                 <p>Prénom : {{ participant.prenom }}</p>
                 <p>Nom : {{ participant.nom }}</p>
-                {% if ( participant.telephone == null )%}
+                {% if ( participant.telephone == null ) %}
                     <p>Téléphone : Non renseigné</p>
                 {% else %}
                     <p>Téléphone : {{ participant.telephone }}</p>
@@ -22,8 +23,13 @@
 
                 <a class="btn btn-primary offset-4 col-4 mt-3" href="{{ path('app_main') }}">Retour</a>
             </div>
-    </div>
-
+        </div>
+    {% else %}
+        <div class="alert alert-danger text-center offset-2 col-8 mt-5">
+            <h3>Désolé, vous n'êtes pas autorisé à  consulter ce profil 😕</h3>
+        </div>
+        <a class="btn btn-primary offset-5 col-2 mt-3" href="{{ path('app_main') }}">Retour</a>
+    {% endif %}
 
 
 {% endblock %}

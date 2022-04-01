@@ -27,15 +27,24 @@ class UserController extends AbstractController
     /**
      * @Route("/profil/{id}", name="app_profil", requirements={"id"="\d+"})
      */
-    public function afficherProfil($id, SiteRepository $siteRepo):Response
+    public function afficherProfil($id, SiteRepository $siteRepo): Response
     {
+        $peutConsulterProfil = false;
+        $visiteur = $this->getUser();
+        $sortiesVisiteur = $visiteur->getSorties();
+        foreach ($sortiesVisiteur as $sortie){
+            foreach ($sortie->getParticipants() as $profileUser){
+                if($profileUser->getId() == $visiteur->getId()){
+                    $peutConsulterProfil = true;
+                }
+            }
+        }
 
-     $participant = $this->partRepo->find($id);
-     $site = $siteRepo->findAll();
-     //dd($participant);
+        $participant = $this->partRepo->find($id);
+        $site = $siteRepo->findAll();
 
 
-     return $this->render('user/afficherProfil.html.twig', compact("participant", "site"));
+        return $this->render('user/afficherProfil.html.twig', compact("participant", "site", "peutConsulterProfil"));
     }
 
     /**
@@ -56,10 +65,10 @@ class UserController extends AbstractController
             $isCorrect = password_verify($password, $oldPassword);
 
             if ($isCorrect) {
-                    $this->addFlash("success", "Modifications enregistrées");
-                    // on insère les nouvelles informations dans la base de données
+                $this->addFlash("success", "Modifications enregistrées");
+                // on insère les nouvelles informations dans la base de données
 
-                    $em->flush();
+                $em->flush();
 
 
             } else {

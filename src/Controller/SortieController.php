@@ -310,7 +310,7 @@ class SortieController extends AbstractController
             return $this->render('sortie/annulerSortie.html.twig', compact("sortie"));
 
         } else {
-            $this->redirectToRoute("app_main");
+            return $this->redirectToRoute("app_main");
         }
        return true;
     }
@@ -321,25 +321,30 @@ class SortieController extends AbstractController
     {
         $now = new \DateTime();
         $sortie = $sortieRepo->find($id);
+
         if($this->getUser() == $sortie->getOrganisateur() && $sortie->getDateHeureDebut() > $now){
-            if($sortie->getEtat()->getId() == '2'){
+
+            if($sortie->getEtat()->getId() == '2' || $sortie->getEtat()->getId() == '3' ){
                 $sortie->setMotifAnnulation($_POST["motif"]);
                 $etat = $etatRepo->find(6);
                 $sortie->setEtat($etat);
                 $em->flush();
                 $this->addFlash("success", "Sortie annulée");
                 return $this->redirectToRoute("app_detailSortie", ['id' => $id]);
-            } else if($sortie->getEtat()->getId() == '1'){
+            } else if($sortie->getEtat()->getId() == '1' ){
                 $sortieRepo->remove($sortie);
                 $em->flush();
                 $this->addFlash("success", "Sortie supprimée");
                 return $this->redirectToRoute("app_main");
+            } else {
+                $this->addFlash("danger", "La sortie n'a pas pu être supprimée.");
+                return $this->redirectToRoute("annulation_sortie", ['id' => $id]);
             }
 
 
 
         } else {
-            $this->redirectToRoute("app_main");
+            return $this->redirectToRoute("app_main");
         }
         return true;
     }
