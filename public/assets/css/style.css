@@ -2,8 +2,8 @@ body{
     background: #212529;
 }
 
-a{
-    color: #68c7de;
+.table a{
+    color: #68c7de !important;
 }
 
 .navbar-collapse{
@@ -39,6 +39,34 @@ a{
     width: 100%;
 }
 
-.lieu_input{
+.lieu_input {
     width: 100%;
+}
+
+.page-item a{
+    background-color: #2c3034 !important;
+    color: white;
+    border: none;
+}
+
+.page-link{
+    color: white !important;
+}
+
+.active a{
+    background-color: #68c7de !important;
+    color: white;
+    border: none;
+}
+
+/*.disabled  a{*/
+/*    background-color: #2c3034 !important;*/
+/*}*/
+
+.pagination li:first-child a {
+    background-color: #2c3034 !important;
+}
+
+.pagination li:last-child a {
+    background-color: #2c3034 !important;
 }

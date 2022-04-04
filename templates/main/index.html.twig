@@ -3,6 +3,12 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
+
+
+
+
+
+
     <form action="{{ path('app_main') }}" method="POST">
         <h2>Filtrer les sorties</h2>
 
@@ -84,4 +90,7 @@
         {% endfor %}
         </tbody>
     </table>
+    <div class="navigation mt-5">
+        {{ knp_pagination_render(sorties) }}
+    </div>
 {% endblock %}

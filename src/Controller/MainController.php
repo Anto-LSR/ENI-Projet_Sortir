@@ -7,7 +7,9 @@ use App\Entity\Sortie;
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use App\Repository\SortieRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -17,7 +19,7 @@ class MainController extends AbstractController
     /**
      * @Route("/", name="app_main")
      */
-    public function afficherSorties(SortieRepository $sortieRepo, ParticipantRepository $participantsRepo, SiteRepository $siteRepo): Response
+    public function afficherSorties(Request $request,PaginatorInterface $paginator, SortieRepository $sortieRepo, ParticipantRepository $participantsRepo, SiteRepository $siteRepo): Response
     {
         if($this->isGranted('ROLE_USER') == false){
             return $this->redirectToRoute("app_login");
@@ -52,7 +54,12 @@ class MainController extends AbstractController
            $sorties = $sortieRepo->selectByFilters($user, $recherche, $site, $dateDebut, $dateFin, $jeSuisOrganisateur, $jeSuisInscrit, $jeSuisPasInscrit);
 
         }
-
+        $sorties = $paginator->paginate(
+            $sorties,
+            $request->query->getInt('page', 1),
+            10
+        );
+        $sorties->setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v3_pagination.html.twig');
 
 
 

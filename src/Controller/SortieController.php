@@ -194,7 +194,6 @@ class SortieController extends AbstractController
         $lieu->setLatitude($data->latitude);
         $lieu->setLongitude($data->longitude);
         $lieu->setVille($ville);
-
         $lieuRepo->add($lieu);
         return $this->json($req->getContent());
     }
