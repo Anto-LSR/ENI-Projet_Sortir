@@ -70,3 +70,12 @@ body{
 .pagination li:last-child a {
     background-color: #2c3034 !important;
 }
+
+.navbar div{
+    background: red;
+
+}
+
+.navbar{
+    padding: 0 !important;
+}
