@@ -16,12 +16,13 @@
         </div>
 
         <div>
-            <h3 class="text-center mb-2 mt-2">{{ sortie.nom | capitalize}}</h3>
+            <h3 class="text-center mb-2 mt-2">{{ sortie.nom | capitalize }}</h3>
         </div>
 
 
         <div>
-            <h6 class="text-center mb-5">Organisée par <strong>{{ sortie.organisateur.pseudo | capitalize }}</strong></h6>
+            <h6 class="text-center mb-5">Organisée par <strong>{{ sortie.organisateur.pseudo | capitalize }}</strong>
+            </h6>
         </div>
 
         <div class="row">
@@ -49,8 +50,12 @@
                     <p class="text-center">{{ sortie.motifAnnulation }}</p>
                 </div>
             {% endif %}
-
-
+            <h5>Participants : </h5>
+            <ul class="ms-3">
+            {% for participant  in sortie.participants %}
+                <a href="{{ path('app_profil', {id:participant.id}) }}"><li class="">{{ participant.pseudo | capitalize}}</li></a>
+            {% endfor %}
+            </ul>
             <a class="btn btn-primary offset-4 col-4 mt-3" href="{{ path('app_main') }}">Retour</a>
 
             {% if eventStarted == 0 and sortie.etat.id != 6 and sortie.etat.id != 5 and sortie.etat.id != 3 %}
@@ -74,7 +79,7 @@
                     <button class="btn btn-secondary offset-4 col-4 mt-3">Inscription impossible</button>
                 {% endif %}
             {% endif %}
-            {% if sortie.organisateur.id == app.user.id and showCancelBtn == 1 and sortie.etat.id != 6  and sortie.etat.id != 5%}
+            {% if sortie.organisateur.id == app.user.id and showCancelBtn == 1 and sortie.etat.id != 6  and sortie.etat.id != 5 %}
                 <a class="btn btn-danger offset-4 col-4 mt-5"
                    href="{{ path('annulation_sortie', {id:sortie.id}) }}">❌ Annuler la sortie </a>
             {% endif %}
