@@ -45,15 +45,64 @@ class SortieRepository extends ServiceEntityRepository
         }
     }
 
-    public function selectByFilters($recherche, $site, $dateDebut, $dateFin, $jeSuisOrganisateur, $jeSuisInscrit, $jeSuisPasInscrit)
+    public function selectByFilters($user, $recherche, $site, $dateDebut, $dateFin, $jeSuisOrganisateur, $jeSuisInscrit, $jeSuisPasInscrit)
     {
-        //TODO**   CI DESSOUS UN EXEMPLE DE FILTRE, LE RESTE DEMERDEZ VOUS
 
         $qb = $this->createQueryBuilder('s');
-        $qb->join("s.organisateur", "o")
-            ->andWhere('o.site = :site')
-            ->setParameter('site', $site);
+        $qb->join("s.organisateur", "o");
+
+        //Condition : affichage selon le site choisi rattaché à l'organisateur de l'évènement avec le join
+            if(trim($site) != null && $site != "all"){
+
+                $qb->andWhere($qb->expr()->eq('o.site', ':site'))
+                ->setParameter('site', $site);
+            }
+        //Condition : filtre sur le contenu du nom de la sortie
+            if(trim($recherche) != null) {
+                $qb->andWhere($qb->expr()->like('s.nom', ':search'))
+                ->setParameter('search', '%'.trim($recherche).'%');
+            }
+
+        //Condition : filtre sur la date de début sélectionnée qui doit etre inférieure à la date de début
+        if($dateDebut != null && $dateFin == null) {
+                $qb->andWhere('s.dateHeureDebut  >= :dateHD')
+                ->setParameter('dateHD', $dateDebut);
+            }
+
+        //Condition : filtre sur la date de début sélectionnée qui doit etre inférieure à la date de fin
+        if($dateFin != null && $dateDebut == null) {
+            $qb->andWhere('s.dateHeureDebut <= :dateF')
+                ->setParameter('dateF',$dateFin);
+
+        }
+        // filtre pour sélectionner une sortie entre les deux dates choisies
+        if($dateFin != null && $dateDebut != null) {
+            $qb->andWhere('s.dateHeureDebut  >= :dateHD')
+                ->setParameter('dateHD', $dateDebut);
+            $qb->andWhere('s.dateHeureDebut <= :dateF')
+                ->setParameter('dateF', $dateFin);
+        }
+
+        // filtre pour sélectionner les sorties dont je suis l'organisateur
+        if($jeSuisOrganisateur != null) {
+            $qb->andWhere('s.organisateur = :user')
+                ->setParameter('user', $user);
+        }
+
+        // filtre pour sélectionner les sorties auxquelles je suis inscrit
+        if($jeSuisInscrit != null) {
+            $qb->andWhere(':inscrit MEMBER OF s.participants')
+                ->setParameter('inscrit', $user);
+        }
+
+        // filtre pour sélectionner les sorties auxquelles je ne suis pas inscrit
+        if($jeSuisPasInscrit != null) {
+            $qb->andWhere(':inscrit NOT MEMBER OF s.participants')
+                ->setParameter('inscrit', $user);
+        }
+
         return $qb->getQuery()->getResult();
+
     }
 
     // /**

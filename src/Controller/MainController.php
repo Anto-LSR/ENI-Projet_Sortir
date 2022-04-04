@@ -29,10 +29,11 @@ class MainController extends AbstractController
         $userId = $this->getUser()->getId();
 
         if(isset($_POST['submit'])){
+            $user = $this->getUser();
             $recherche = $_POST['recherche'];
             $site = $_POST['site'];
-            $dateDebut  = new \DateTime($_POST['dateDebut']);
-            $dateFin = new \DateTime($_POST['dateFin']);
+            $dateDebut  = $_POST['dateDebut'];
+            $dateFin = $_POST['dateFin'];
 
             $jeSuisOrganisateur = false;
             if(isset($_POST['jeSuisOrganisateur'])) {
@@ -48,7 +49,7 @@ class MainController extends AbstractController
             if(isset($_POST['jeSuisPasInscrit'])) {
                 $jeSuisPasInscrit = true;
             }
-           $sorties = $sortieRepo->selectByFilters($recherche, $site, $dateDebut, $dateFin, $jeSuisOrganisateur, $jeSuisInscrit, $jeSuisPasInscrit);
+           $sorties = $sortieRepo->selectByFilters($user, $recherche, $site, $dateDebut, $dateFin, $jeSuisOrganisateur, $jeSuisInscrit, $jeSuisPasInscrit);
 
         }
 

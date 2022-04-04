@@ -9,6 +9,7 @@
         <div class="row col-4">
             <label for="site" class="form-label">Site : </label>
                 <select name="site" id="site" class="form-select">
+                    <option value="all">Tous les sites</option>
                     {% for site in sites %}
                         <option value="{{ site.id }}">{{ site.nomSite }}</option>
                     {% endfor %}
