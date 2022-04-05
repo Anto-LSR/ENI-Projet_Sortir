@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un Site{% endblock %}
+
+{% block body %}
+    <div class="border rounded p-4 offset-2 col-8 shadow">
+        <h3 class="text-center p-4">Ajouter un site</h3>
+
+        <div class="row text-center">
+            {% for messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        {{ form_start(ajoutSiteForm) }}
+
+            {{ form_row(ajoutSiteForm.nomSite) }}
+
+            <a href="{{ path('app_listeSites') }}" class="btn btn-primary">Afficher la liste des sites</a>
+        {{ form_end(ajoutSiteForm) }}
+    </div>
+{% endblock %}
