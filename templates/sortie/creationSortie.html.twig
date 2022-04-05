@@ -20,7 +20,15 @@
 
         {{ form_row(sortieForm.nom) }}
         {{ form_row(sortieForm.dateHeureDebut) }}
-        {{ form_row(sortieForm.duree) }}
+        {# {{ form_row(sortieForm.duree) }} #}
+
+        {{ form_label(sortieForm.duree) }}
+        {{ form_widget(sortieForm.duree) }}
+        {{ form_errors(sortieForm.duree) }}
+
+
+
+        {# <div class="invalid-feedback d-block">protu</div> #}
         {{ form_row(sortieForm.dateLimiteInscription) }}
         {{ form_row(sortieForm.nbInscriptionsMax) }}
         {{ form_row(sortieForm.infoSortie) }}
@@ -87,6 +95,12 @@
     </div>
 
 
+    <script>
+            let message = "Valeur saisie incorrecte";
+            let error = document.getElementsByClassName('invalid-feedback')
+            error[0].innerHTML = message
+    </script>
     <script src="{{ asset('assets/js/creationSortie.js') }}"/>
+
 
 {% endblock %}
