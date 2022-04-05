@@ -79,7 +79,7 @@
                     <button class="btn btn-secondary offset-4 col-4 mt-3">Inscription impossible</button>
                 {% endif %}
             {% endif %}
-            {% if sortie.organisateur.id == app.user.id and showCancelBtn == 1 and sortie.etat.id != 6  and sortie.etat.id != 5 %}
+            {% if (sortie.organisateur.id == app.user.id and showCancelBtn == 1 and sortie.etat.id != 6  and sortie.etat.id != 5) or (is_granted('ROLE_ADMIN')  and sortie.etat.id != 6  and sortie.etat.id != 5) %}
                 <a class="btn btn-danger offset-4 col-4 mt-5"
                    href="{{ path('annulation_sortie', {id:sortie.id}) }}">❌ Annuler la sortie </a>
             {% endif %}

@@ -31,7 +31,7 @@
                     <label for="motif" class="form-label">Motif d'annulation :</label>
                     <textarea class="form-control" id="motif" name="motif" rows="3"></textarea>
                 </div>
-                {% if sortie.organisateur.id == app.user.id %}
+                {% if sortie.organisateur.id == app.user.id or is_granted('ROLE_ADMIN') %}
                     <button type="submit" class="btn btn-danger offset-4 col-4 mt-5"
                     >❌ Annuler la sortie
                     </button>

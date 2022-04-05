@@ -304,7 +304,7 @@ class SortieController extends AbstractController
     public function annulationSortie($id,  EntityManagerInterface $em, SortieRepository $sortieRepo): Response{
         $sortie = $sortieRepo->find($id);
         $now = new \DateTime();
-        if($this->getUser() == $sortie->getOrganisateur() && $sortie->getDateHeureDebut() > $now){
+        if(($this->getUser() == $sortie->getOrganisateur() && $sortie->getDateHeureDebut() > $now)  || $this->getUser()->getAdministrateur() == true){
 
             return $this->render('sortie/annulerSortie.html.twig', compact("sortie"));
 
@@ -321,7 +321,7 @@ class SortieController extends AbstractController
         $now = new \DateTime();
         $sortie = $sortieRepo->find($id);
 
-        if($this->getUser() == $sortie->getOrganisateur() && $sortie->getDateHeureDebut() > $now){
+        if(($this->getUser() == $sortie->getOrganisateur() && $sortie->getDateHeureDebut() > $now) || $this->getUser()->getAdministrateur() == true){
 
             if($sortie->getEtat()->getId() == '2' || $sortie->getEtat()->getId() == '3' ){
                 $sortie->setMotifAnnulation($_POST["motif"]);
