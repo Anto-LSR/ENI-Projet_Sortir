@@ -85,6 +85,9 @@ body{
 
 header {
     margin-bottom: 5vh;
+    background-image: url("/assets/img/banniere.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .option{
@@ -127,4 +130,11 @@ header {
 
 .ombre{
     box-shadow: 5px 5px 10px #5fb6ce;
+}
+
+.nav-item a{
+    color:#ffffff;
+}
+.nav-item a:hover{
+    color: burlywood;
 }
