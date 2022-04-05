@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Participant;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -25,7 +26,10 @@ class ModifProfilType extends AbstractType
                 'required' => false,
                 'label' => 'Téléphone'
             ])
-
+            ->add('photo', FileType::class, [
+                'mapped' => false,
+                'maxSize' =>
+            ])
             #->add('site')
             #->add('sorties')
             ->add('submit', SubmitType::class, [
@@ -35,6 +39,7 @@ class ModifProfilType extends AbstractType
             ->add('ModifMDP', ButtonType::class, [
                 'label' => 'Modifier le mot de passe'
             ])
+
         ;
     }
 

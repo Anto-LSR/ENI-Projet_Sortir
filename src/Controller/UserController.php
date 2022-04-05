@@ -8,11 +8,14 @@ use App\Form\UpdatePasswordType;
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class UserController extends AbstractController
 {
@@ -50,7 +53,7 @@ class UserController extends AbstractController
     /**
      * @Route("/monProfil", name="app_monProfil")
      */
-    public function profil(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher): Response
+    public function profil(ParticipantRepository $partRepo, SluggerInterface $slugger ,Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher): Response
     {
 
         //On récupère l'utilisateur connecté
@@ -63,6 +66,27 @@ class UserController extends AbstractController
         if ($modifProfilForm->isSubmitted() && $modifProfilForm->isValid()) {
             $password = $_POST["verifPassword"];
             $isCorrect = password_verify($password, $oldPassword);
+            $photo = $modifProfilForm['photo']->getData();
+            $extension = $photo->guessExtension();
+            if($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'gif'){
+                $originalFilename = pathinfo($photo->getClientOriginalName());
+                $safeFileName = $slugger->slug($originalFilename["filename"]);
+                $newFileName = $safeFileName.'-'.uniqid().'.'.$photo->guessExtension();
+                try{
+                    $photo->move($this->getParameter('uploads'),
+                    $newFileName);
+                    $path = '/uploads/'.$newFileName;
+
+                    $user = $partRepo->find($this->getUser()->getId());
+                    $user->setPhoto($path);
+
+                }
+                catch(FileException $e){
+
+                }
+
+                //$photo->move($this->getParameter('uploads'), 'profile_picture'.rand(1, 99999).'.'.$extension);
+            }
 
             if ($isCorrect) {
                 $this->addFlash("success", "Modifications enregistrées");

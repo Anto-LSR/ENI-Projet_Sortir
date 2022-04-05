@@ -9,6 +9,9 @@
             <div><h3 class="text-center mb-5 mt-2">{{ participant.pseudo }}</h3></div>
 
             <div class="">
+                {% if participant.photo %}
+                    <img src="{{ asset(participant.photo) }}" alt="" class="profile_image">
+                {% endif %}
                 <p>Pseudo : {{ participant.pseudo }}</p>
                 <p>Prénom : {{ participant.prenom }}</p>
                 <p>Nom : {{ participant.nom }}</p>

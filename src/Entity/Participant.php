@@ -91,6 +91,11 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $sorties;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $photo;
+
     public function __construct()
     {
         $this->sortiesOrganisees = new ArrayCollection();
@@ -306,5 +311,17 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function getSorties(): Collection
     {
         return $this->sorties;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): self
+    {
+        $this->photo = $photo;
+
+        return $this;
     }
 }

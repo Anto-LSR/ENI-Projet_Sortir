@@ -28,16 +28,17 @@
             {% endfor %}
         {% endfor %}
     </div>
-
     <h4>{{  app.user.prenom }} {{ app.user.nom }}</h4>
-
-
+    {% if app.user.photo %}
+    <img src="{{ asset(app.user.photo) }}" alt="" class="profile_image">
+    {% endif %}
     {{ form_start(modifProfilForm) }}
     {{ form_label(modifProfilForm.pseudo, "Pseudo") }} <span class="text-danger">*</span>
     {{ form_widget(modifProfilForm.pseudo) }}
     {{ form_label(modifProfilForm.email, "Email") }} <span class="text-danger">*</span>
     {{ form_widget(modifProfilForm.email) }}
     {{ form_row(modifProfilForm.telephone) }}
+    {{ form_row(modifProfilForm.photo) }}
     <div class="mb-3">
         <label for=     "verifPassword" class="form-label required">Mot de passe <span class="text-danger">*</span></label>
         <input type=    "password"
