@@ -4,50 +4,64 @@
 
 {% block body %}
 
-
-
-
-
-
     <form action="{{ path('app_main') }}" method="POST">
-        <h2>Filtrer les sorties</h2>
+    <div class="container mb-5 cadre ombre">
 
-        <div class="row col-4">
-            <label for="site" class="form-label">Site : </label>
-                <select name="site" id="site" class="form-select">
-                    <option value="all">Tous les sites</option>
-                    {% for site in sites %}
-                        <option value="{{ site.id }}">{{ site.nomSite }}</option>
-                    {% endfor %}
-                </select>
+        <h2 class="text-center">Filtrer les sorties</h2>
 
-            <label for="recherche" class="form-label">Le nom de la sortie contient : </label>
-            <input type="search" id="recherche" name="recherche" class="form-control">
-            <div class="row col-6">
-                <label for="dateDebut" class="form-label">Entre </label>
-                <input type="datetime-local" name="dateDebut" id="dateDebut" class="form-control">
-                <label for="dateFin" class="form-label">Et </label>
-                <input type="datetime-local" name="dateFin" id="dateFin"class="form-control">
+        <div class="filtres">
+            <div class="col-5">
+                <div class="option">
+                    <div class="label">
+                        <label for="site" class="form-label">Site : </label>
+                    </div>
+                    <div class="btn-width">
+                        <select name="site" id="site" class="form-select">
+                            <option value="all">Tous les sites</option>
+                            {% for site in sites %}
+                                <option value="{{ site.id }}">{{ site.nomSite }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+
+                </div>
+                <div class="dates">
+                    <label for="dateDebut" class="form-label">Entre </label>
+                    <input type="datetime-local" name="dateDebut" id="dateDebut" class="form-control">
+                    <label for="dateFin" class="form-label">Et </label>
+                    <input type="datetime-local" name="dateFin" id="dateFin"class="form-control">
+                </div>
+                <div class="mt-2 justify-content-center">
+                    <label style="width: fit-content;" for="recherche" class="form-label">Le nom de la sortie contient : </label>
+                    <input type="search" id="recherche" name="recherche" class="form-control">
+                </div>
+            </div>
+
+            <div class="col-4 d-flex flex-column justify-content-between">
+                <div class="filters_checkbox d-flex ">
+                    <div>
+                        <input type="checkbox" id="jeSuisOrganisateur" name="jeSuisOrganisateur" class="form-check-input">
+                        <input type="checkbox" id="jeSuisInscrit" name="jeSuisInscrit" class="form-check-input">
+                        <input type="checkbox" id="jeSuisPasInscrit" name="jeSuisPasInscrit" class="form-check-input">
+                        <input type="checkbox" id="sortiePassee" name="sortiePassee" class="form-check-input">
+                    </div>
+                    <div class="champs">
+                        <label for="jeSuisOrganisateur" class="form-check-label">Sorties dont je suis l'organisateur/trice</label>
+                        <label for="jeSuisInscrit" class="form-check-label">Sorties auxquelles je suis inscrit/e</label>
+                        <label for="jeSuisPasInscrit" class="form-check-label">Sorties auxquelles je ne suis pas inscrit/e</label>
+                        <label for="sortiePassee" class="form-check-label">Sorties passées</label>
+                    </div>
+                </div>
+                <div class="mt-2 text-center">
+                    <button type="submit" name="submit" class="btn btn-primary w-100">Rechercher</button>
+                </div>
+
             </div>
         </div>
 
-        <div class="filters_checkbox">
-            <input type="checkbox" id="jeSuisOrganisateur" name="jeSuisOrganisateur" class="form-check-input">
-            <label for="jeSuisOrganisateur" class="form-check-label">Sorties dont je suis l'organisateur/trice</label>
-
-            <input type="checkbox" id="jeSuisInscrit" name="jeSuisInscrit" class="form-check-input">
-            <label for="jeSuisInscrit" class="form-check-label">Sorties auxquelles je suis inscrit/e</label>
-
-            <input type="checkbox" id="jeSuisPasInscrit" name="jeSuisPasInscrit" class="form-check-input">
-            <label for="jeSuisPasInscrit" class="form-check-label">Sorties auxquelles je ne suis pas inscrit/e</label>
-
-            <input type="checkbox" id="sortiePassee" name="sortiePassee" class="form-check-input">
-            <label for="sortiePassee" class="form-check-label">Sorties passées</label>
-
         </div>
-        <button type="submit" name="submit" class="btn btn-primary">Rechercher</button>
-        
-        
+
     </form>
     
     
