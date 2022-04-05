@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réinitialisation du mot de passe{% endblock %}
+
+{% block body %}
+    <style>
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+        }
+
+        .example-wrapper code {
+            background: #F5F5F5;
+            padding: 2px 6px;
+        }
+    </style>
+    <div class="row text-center">
+        {% for messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+    <div class="example-wrapper">
+        <h1 class="text-center mb-5 mt-5">Modifier votre mot de passe</h1>
+        <form action="{{ path('app_reset_password_2',  {id:id}) }}" method="POST">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Nouveau mot de passe</label>
+                <input name="password" type="password" class="form-control" id="exampleInputEmail1"
+                       aria-describedby="emailHelp">
+
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Confirmation </label>
+                <input name="confirmation" type="password" class="form-control" id="exampleInputEmail1"
+                       aria-describedby="emailHelp">
+
+            </div>
+            {% if lengthError == 1 %}
+            <div class="invalid-feedback d-block">
+                <p>Le mot de passe doit comporter 6 caractères minimum</p>
+            </div>
+            {% endif %}
+
+            {% if confirmationError == 1 %}
+                <div class="invalid-feedback d-block">
+                    <p>Les mots de passes ne correspondent pas</p>
+                </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary">Valider</button>
+        </form>
+
+
+
+
+
+        <div class="button_row d-flex mt-5  justify-content-around">
+
+            <a href="{{ path('app_monProfil') }}"></a>
+        </div>
+    </div>
+{% endblock %}

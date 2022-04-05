@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réinitialisation du mot de passe{% endblock %}
+
+{% block body %}
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    </style>
+
+    <div class="example-wrapper">
+        <h1 class="text-center mb-5 mt-5">Modifier votre mot de passe</h1>
+        <form action="{{ path('app_reset_password') }}" method="POST">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Veuillez renseigner votre email</label>
+                <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Valider</button>
+        </form>
+
+        <div class="button_row d-flex mt-5  justify-content-around">
+
+            <a href="{{path('app_monProfil')}}"></a>
+        </div>
+    </div>
+{% endblock %}
