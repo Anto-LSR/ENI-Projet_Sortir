@@ -45,7 +45,7 @@ class SortieRepository extends ServiceEntityRepository
         }
     }
 
-    public function selectByFilters($user, $recherche, $site, $dateDebut, $dateFin, $jeSuisOrganisateur, $jeSuisInscrit, $jeSuisPasInscrit)
+    public function selectByFilters($user, $recherche, $site, $dateDebut, $dateFin, $jeSuisOrganisateur, $jeSuisInscrit, $jeSuisPasInscrit, $sortiePassee)
     {
 
         $qb = $this->createQueryBuilder('s');
@@ -99,6 +99,10 @@ class SortieRepository extends ServiceEntityRepository
         if($jeSuisPasInscrit != null) {
             $qb->andWhere(':inscrit NOT MEMBER OF s.participants')
                 ->setParameter('inscrit', $user);
+        }
+
+        if($sortiePassee != null){
+            $qb->andWhere('s.etat =  5');
         }
 
         return $qb->getQuery()->getResult();

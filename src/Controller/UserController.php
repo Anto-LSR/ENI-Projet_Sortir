@@ -8,6 +8,7 @@ use App\Form\UpdatePasswordType;
 use App\Repository\ParticipantRepository;
 use App\Repository\SiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -150,6 +151,61 @@ class UserController extends AbstractController
 
         return $this->render('user/modifier-mdp.html.twig', ["user" => $user, "modifMDPForm" => $modifMDPForm->createView()]);
     }
+
+    /**
+     * @Route("/admin/gestion_utilisateur", name="app_admin_gestion")
+     */
+    public function userManager(Request $request, ParticipantRepository $partRepo, PaginatorInterface $paginator): Response
+    {
+        $users = $partRepo->findAll();
+        $users = $paginator->paginate(
+            $users,
+            $request->query->getInt('page', 1),
+            5
+        );
+        $users->setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v3_pagination.html.twig');
+        return $this->render('user/gestion_utilisateurs.twig', compact('users'));
+    }
+
+    /**
+     * @Route("/admin/desactiver/{id}", name="app_disable_user", requirements={"id"="\d+"})
+     */
+    public function disableUser($id, ParticipantRepository $partRepo, EntityManagerInterface $em): Response
+    {
+        $user = $partRepo->find($id);
+        $user->setActif(false);
+        $em->flush();
+
+        return $this->redirectToRoute('app_admin_gestion');
+
+    }
+
+    /**
+     * @Route("/admin/reactiver/{id}", name="app_enable_user", requirements={"id"="\d+"})
+     */
+    public function enableUser($id, ParticipantRepository $partRepo, EntityManagerInterface $em): Response
+    {
+        $user = $partRepo->find($id);
+        $user->setActif(true);
+        $em->flush();
+
+        return $this->redirectToRoute('app_admin_gestion');
+
+    }
+
+    /**
+     * @Route("/admin/supprimer/{id}", name="app_remove_user", requirements={"id"="\d+"})
+     */
+    public function removeUser($id, ParticipantRepository $partRepo, EntityManagerInterface $em): Response
+    {
+        $user = $partRepo->find($id);
+        $partRepo->remove($user);
+        $em->flush();
+
+        return $this->redirectToRoute('app_admin_gestion');
+
+    }
+
 
 
 }

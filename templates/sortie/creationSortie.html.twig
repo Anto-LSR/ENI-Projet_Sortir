@@ -65,7 +65,7 @@
             {{ form_row(sortieForm.Enregistrer) }}
             {{ form_row(sortieForm.Publier,{}) }}
             <div>
-                <a href="{{ path("app_main") }}" class="btn btn-primary">Annuler</a>
+                <a href="{{ path("app_main") }}" class="btn btn-primary" >Annuler</a>
             </div>
         </div>
 
@@ -86,7 +86,7 @@
                     {{ form(lieuForm) }}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button id="cancelBtn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                     <button type="button" class="btn btn-primary" id="addLieuBtn" data-bs-dismiss="modal">Ajouter
                     </button>
                 </div>
@@ -96,9 +96,9 @@
 
 
     <script>
-            let message = "Valeur saisie incorrecte";
-            let error = document.getElementsByClassName('invalid-feedback')
-            error[0].innerHTML = message
+            // let message = "Valeur saisie incorrecte";
+            // let error = document.getElementsByClassName('invalid-feedback')
+            // error[0].innerHTML = message
     </script>
     <script src="{{ asset('assets/js/creationSortie.js') }}"/>
 

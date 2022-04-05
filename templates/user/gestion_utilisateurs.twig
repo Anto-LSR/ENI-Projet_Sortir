@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion utilisateurs{% endblock %}
+
+{% block body %}
+
+    <div class="row text-center">
+        {% for messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+    <table class="table table-dark table-striped ">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Prénom</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Pseudo</th>
+            <th scope="col">Email</th>
+            <th scope="col">Téléphone</th>
+            <th scope="col">Site</th>
+            <th scope="col">Administrateur</th>
+            <th scope="col">Actif</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <th scope="row">{{ user.id }}</th>
+                <td>{{ user.prenom }}</td>
+                <td>{{ user.nom }}</td>
+                <td>{{ user.pseudo }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.telephone }}</td>
+                <td>{{ user.site.nomSite }}</td>
+
+                {% if user.administrateur == 1 %}
+                    <td>✔</td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+                {% if user.actif == 0 %}
+                    <td>❌</td>
+                {% else %}
+                    <td>✔</td>
+                {% endif %}
+                {% if user.actif == 1 %}
+                    <td class="d-flex justify-content-around">
+                        <a href="{{ path("app_remove_user", {id: user.id}) }}">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                        <a href="{{ path("app_disable_user", {id: user.id}) }}">
+                            <i class="fa-solid fa-pause"></i>
+                        </a>
+                    </td>
+                {% else %}
+                    <td class="d-flex justify-content-around">
+                        <a href="{{ path("app_remove_user", {id: user.id}) }}">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                        <a href="{{ path("app_enable_user", {id: user.id}) }}">
+                            <i class="fa-solid fa-play"></i>
+                        </a>
+                    </td>
+                {% endif %}
+
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    <div class="navigation mt-5">
+        {{ knp_pagination_render(users) }}
+    </div>
+
+{% endblock %}

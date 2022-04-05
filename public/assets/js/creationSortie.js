@@ -1,4 +1,13 @@
 
+    let cancelBtn = document.getElementById("cancelBtn");
+
+    cancelBtn.addEventListener('click', () => {
+        document.getElementById('ajout_lieu_nomLieu').value = ''
+        document.getElementById('ajout_lieu_rue').value = ''
+        document.getElementById('ajout_lieu_latitude').value = ''
+        document.getElementById('ajout_lieu_longitude').value = ''
+    })
+
     //*****AJOUTER LIEU******
     getVilles().then(data => {
         let villeSelect = document.getElementById("ville")
@@ -18,12 +27,12 @@
         const addBtn = document.getElementById('addLieuBtn')
         addBtn.addEventListener('click', async (e) => {
             console.log('coucou');
-            const villeSelected = document.getElementById('ajout_lieu_ville').value
-            const nomLieu = document.getElementById('ajout_lieu_nomLieu').value
-            const rue = document.getElementById('ajout_lieu_rue').value
-            const latitude = document.getElementById('ajout_lieu_latitude').value
+            let villeSelected = document.getElementById('ajout_lieu_ville').value
+            let nomLieu = document.getElementById('ajout_lieu_nomLieu').value
+            let rue = document.getElementById('ajout_lieu_rue').value
+            let latitude = document.getElementById('ajout_lieu_latitude').value
 
-            const longitude = document.getElementById('ajout_lieu_longitude').value
+            let longitude = document.getElementById('ajout_lieu_longitude').value
 
             const lieu = {
                 nomLieu: nomLieu,
@@ -46,6 +55,14 @@
             data = await getVilles()
 
             getLieux(selectedVille, data)
+
+
+
+            document.getElementById('ajout_lieu_nomLieu').value = ''
+            document.getElementById('ajout_lieu_rue').value = ''
+            document.getElementById('ajout_lieu_latitude').value = ''
+            document.getElementById('ajout_lieu_longitude').value = ''
+
 
 
         })

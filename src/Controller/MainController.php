@@ -36,6 +36,7 @@ class MainController extends AbstractController
             $site = $_POST['site'];
             $dateDebut  = $_POST['dateDebut'];
             $dateFin = $_POST['dateFin'];
+            $sortiePassee = $_POST['sortiePassee'];
 
             $jeSuisOrganisateur = false;
             if(isset($_POST['jeSuisOrganisateur'])) {
@@ -51,7 +52,12 @@ class MainController extends AbstractController
             if(isset($_POST['jeSuisPasInscrit'])) {
                 $jeSuisPasInscrit = true;
             }
-           $sorties = $sortieRepo->selectByFilters($user, $recherche, $site, $dateDebut, $dateFin, $jeSuisOrganisateur, $jeSuisInscrit, $jeSuisPasInscrit);
+
+            $sortiePasse = false;
+            if(isset($_POST['sortiePasse'])){
+                $sortiePassee = true;
+            }
+           $sorties = $sortieRepo->selectByFilters($user, $recherche, $site, $dateDebut, $dateFin, $jeSuisOrganisateur, $jeSuisInscrit, $jeSuisPasInscrit, $sortiePassee);
 
         }
         $sorties = $paginator->paginate(

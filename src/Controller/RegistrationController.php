@@ -41,6 +41,7 @@ class RegistrationController extends AbstractController
             if($user->getAdministrateur()){
                 $user->setRoles(['ROLE_ADMIN', 'ROLE_USER']);
             }
+            $user->setActif(true);
             //---------------------------------
 //            $user->setAdministrateur(false);
 //            $user->setActif(true);
