@@ -132,6 +132,25 @@ header {
     box-shadow: 5px 5px 10px #5fb6ce;
 }
 
+.cadre-login{
+    text-align: center;
+}
+
+.input-login{
+    width: 50%;
+    margin: 0 auto;
+}
+
+.title-profil{
+    text-align: center;
+}
+
+.input-profil{
+    text-align: center;
+    width: 60%;
+    margin: 0 auto;
+}
+
 .nav-item a{
     color:#ffffff;
 }
