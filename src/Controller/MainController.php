@@ -36,7 +36,7 @@ class MainController extends AbstractController
             $site = $_POST['site'];
             $dateDebut  = $_POST['dateDebut'];
             $dateFin = $_POST['dateFin'];
-            $sortiePassee = $_POST['sortiePassee'];
+            $sortiePassee = false;
 
             $jeSuisOrganisateur = false;
             if(isset($_POST['jeSuisOrganisateur'])) {
@@ -53,7 +53,7 @@ class MainController extends AbstractController
                 $jeSuisPasInscrit = true;
             }
 
-            $sortiePasse = false;
+            $sortiePassee = false;
             if(isset($_POST['sortiePasse'])){
                 $sortiePassee = true;
             }

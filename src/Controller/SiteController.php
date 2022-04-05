@@ -19,7 +19,7 @@ class SiteController extends AbstractController
     public function ajoutSite(Request $request, SiteRepository $siteRepo, EntityManagerInterface $em): Response
     {
 
-        if($this->isGranted('ROLE_USER') == false){
+        if ($this->isGranted('ROLE_USER') == false) {
             return $this->redirectToRoute("app_login");
         }
 
@@ -27,25 +27,24 @@ class SiteController extends AbstractController
         $ajoutSiteForm = $this->createForm(SiteType::class, $site);
         $ajoutSiteForm->handleRequest($request);
 
-        if($ajoutSiteForm->isSubmitted() && $ajoutSiteForm->isValid()){
+        if ($ajoutSiteForm->isSubmitted() && $ajoutSiteForm->isValid()) {
             $nomSite = $site->getNomSite();
             $site->setNomSite($nomSite);
 
-            $this->addFlash("success","Site ajouté");
+            $this->addFlash("success", "Site ajouté");
 
             $em->persist($site);
             $em->flush();
         }
 
 
-
-        return $this->render('site/index.html.twig', ["ajoutSiteForm"=>$ajoutSiteForm->createView()] );
+        return $this->render('site/index.html.twig', ["ajoutSiteForm" => $ajoutSiteForm->createView()]);
     }
 
     /**
      * @Route("/listeSites", name="app_listeSites")
      */
-    public function listeSites(SiteRepository $siteRepo, Request $request):Response
+    public function listeSites(SiteRepository $siteRepo, Request $request): Response
     {
 //        if($this->isGranted('ROLE_USER') == false){
 //            return $this->redirectToRoute("app_login");
@@ -53,12 +52,11 @@ class SiteController extends AbstractController
 
         $sites = $siteRepo->findAll();
 
-        if($_POST){
+        if ($_POST) {
             $recherche = $_POST['rechercher'];
-           //dd($recherche);
+            //dd($recherche);
             $sites = $siteRepo->selectByFilters($recherche);
         }
-
 
 
         return $this->render('site/listeSites.html.twig', compact('sites'));
@@ -67,15 +65,24 @@ class SiteController extends AbstractController
     /**
      * @Route("/suppSites/{id}", name="app_suppressionSite", requirements={"id"="\d+"})
      */
-    public function suppSite(SiteRepository $siteRepo, Request $request, $id , EntityManagerInterface $em):Response
+    public function suppSite(SiteRepository $siteRepo, Request $request, $id, EntityManagerInterface $em): Response
     {
 
         $site = $siteRepo->find($id);
-        //dd($site);
-        $em->remove($site);
-        $em ->flush();
+        $participants = $site->getParticipants();
+        $i = 0;
+        foreach ($participants as $participant) {
+            $i++;
+        }
+        if($i == 0){
+            $em->remove($site);
+            $em->flush();
+        } else {
+            $this->addFlash("danger", "Impossible de supprimer ce site car il comprend des utilisateurs");
+        }
 
-        return $this->redirectToRoute('app_listeSites', ['id' => $id , 'site' => $site]);
+
+        return $this->redirectToRoute('app_listeSites', ['id' => $id, 'site' => $site]);
     }
 
 
