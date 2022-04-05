@@ -158,3 +158,13 @@ header {
 .nav-item a:hover{
     color: #feff00;
 }
+
+.btn_lieu{
+    color: white !important;
+}
+
+.navbar-toggler{
+    color: white;
+
+    padding-top: 12px !important;
+}
