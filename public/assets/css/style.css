@@ -85,9 +85,10 @@ body{
 
 header {
     margin-bottom: 5vh;
-    background-image: url("/assets/img/banniere.jpg");
+    background: rgb(33,37,41);
+    background-image: url("/assets/img/banniere.png"),linear-gradient(0deg, rgba(33,37,41,1) 15%, rgba(51,79,196,1) 26%);
     background-repeat: no-repeat;
-    background-size: cover;
+    background-position: center;
 }
 
 .option{
@@ -136,5 +137,5 @@ header {
     color:#ffffff;
 }
 .nav-item a:hover{
-    color: burlywood;
+    color: #feff00;
 }
