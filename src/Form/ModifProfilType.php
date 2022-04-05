@@ -28,7 +28,6 @@ class ModifProfilType extends AbstractType
             ])
             ->add('photo', FileType::class, [
                 'mapped' => false,
-                'maxSize' =>
             ])
             #->add('site')
             #->add('sorties')
