@@ -4,6 +4,15 @@
 
 {% block body %}
 <form method="post">
+    <div class="row text-center">
+        {% for messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
     {% if error %}
         <div class="alert alert-danger">Identifiant ou mot de passe incorrect 🤙</div>
     {% endif %}
@@ -33,6 +42,10 @@
                 <input type="checkbox" name="_remember_me"> Se souvenir de moi
             </label>
         </div>
+    <div class="checkbox mb-3">
+        <a href="{{ path('app_reset_password') }}">Mot de passe oublié</a>
+    </div>
+
 
 
     <button class="btn btn-lg btn-primary mt-2" type="submit">

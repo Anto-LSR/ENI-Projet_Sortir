@@ -35,9 +35,9 @@ class UserController extends AbstractController
         $peutConsulterProfil = false;
         $visiteur = $this->getUser();
         $sortiesVisiteur = $visiteur->getSorties();
-        foreach ($sortiesVisiteur as $sortie){
-            foreach ($sortie->getParticipants() as $profileUser){
-                if($profileUser->getId() == $visiteur->getId()){
+        foreach ($sortiesVisiteur as $sortie) {
+            foreach ($sortie->getParticipants() as $profileUser) {
+                if ($profileUser->getId() == $visiteur->getId()) {
                     $peutConsulterProfil = true;
                 }
             }
@@ -53,7 +53,7 @@ class UserController extends AbstractController
     /**
      * @Route("/monProfil", name="app_monProfil")
      */
-    public function profil(ParticipantRepository $partRepo, SluggerInterface $slugger ,Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher): Response
+    public function profil(ParticipantRepository $partRepo, SluggerInterface $slugger, Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher): Response
     {
 
         //On récupère l'utilisateur connecté
@@ -68,20 +68,19 @@ class UserController extends AbstractController
             $isCorrect = password_verify($password, $oldPassword);
             $photo = $modifProfilForm['photo']->getData();
             $extension = $photo->guessExtension();
-            if($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'gif'){
+            if ($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'gif') {
                 $originalFilename = pathinfo($photo->getClientOriginalName());
                 $safeFileName = $slugger->slug($originalFilename["filename"]);
-                $newFileName = $safeFileName.'-'.uniqid().'.'.$photo->guessExtension();
-                try{
+                $newFileName = $safeFileName . '-' . uniqid() . '.' . $photo->guessExtension();
+                try {
                     $photo->move($this->getParameter('uploads'),
-                    $newFileName);
-                    $path = '/uploads/'.$newFileName;
+                        $newFileName);
+                    $path = '/uploads/' . $newFileName;
 
                     $user = $partRepo->find($this->getUser()->getId());
                     $user->setPhoto($path);
 
-                }
-                catch(FileException $e){
+                } catch (FileException $e) {
 
                 }
 
@@ -150,5 +149,65 @@ class UserController extends AbstractController
 
 
         return $this->render('user/modifier-mdp.html.twig', ["user" => $user, "modifMDPForm" => $modifMDPForm->createView()]);
+    }
+
+    /**
+     * @Route("/reinitialiser-motdepasse", name="app_reset_password")
+     */
+    public
+    function resetPw(Request $req, ParticipantRepository $partRepo): Response
+    {
+
+        if ($_POST) {
+            $email = $_POST["email"];
+            try {
+                $user = $partRepo->findBy(['email' => $email]);
+                $userId = $user["0"]->getId();
+                return $this->redirectToRoute('app_reset_password_2', ['id' => $userId]);
+
+            } catch (\Exception $e) {
+                $error = true;
+                return $this->render('user/reinitialiser-mdp.html.twig', compact("error"));
+            }
+
+
+        } else {
+            return $this->render('user/reinitialiser-mdp.html.twig');
+        }
+
+
+    }
+
+    /**
+     * @Route("/reinitialiser-motdepasse/{id}", name="app_reset_password_2", requirements={"id"="\d+"})
+     */
+    public function resetPwFinal(UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $em, Request $request, $id, ParticipantRepository $partRepo): Response
+    {
+        $user = $partRepo->find($id);
+        $lengthError = false;
+        $confirmationError = false;
+        if($_POST){
+            $password = $_POST["password"];
+            $confirmation = $_POST["confirmation"];
+            if($password == $confirmation){
+                if(strlen($password) >= 6){
+                    $newHashedPassword = $userPasswordHasher->hashPassword(
+                        $user,
+                        $password
+                    );
+                    $userID = $user->getId();
+                    $user->setPassword($newHashedPassword);
+                    $em->flush();
+                    $this->addFlash("success", "Mot de passe réinitialisé");
+                    return $this->redirectToRoute('app_login');
+                } else {
+                    $lengthError = true;
+                }
+            } else {
+                $confirmationError = true;
+            }
+        }
+
+        return $this->render('user/reinitialiser-mdp-etape2.html.twig', compact("id", "lengthError", "confirmationError"));
     }
 }
