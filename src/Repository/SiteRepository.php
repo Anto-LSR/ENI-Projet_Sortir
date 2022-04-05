@@ -45,6 +45,19 @@ class SiteRepository extends ServiceEntityRepository
         }
     }
 
+    public function selectByFilters($recherche)
+    {
+        $qb = $this->createQueryBuilder('s');
+
+        //Condition : filtre sur le contenu du nom de la sortie
+        if(trim($recherche) != null) {
+            $qb->andWhere($qb->expr()->like('s.nomSite', ':search'))
+                ->setParameter('search', '%'.trim($recherche).'%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Site[] Returns an array of Site objects
     //  */

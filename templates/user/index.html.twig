@@ -17,7 +17,7 @@
     }
 </style>
 
-<div class="example-wrapper">
+<div class="example-wrapper container mb-5 cadre ombre">
     <h1 class="text-center mb-5 mt-5">Vos informations</h1>
     <div class="row text-center">
         {% for label, messages in app.flashes %}
@@ -28,33 +28,34 @@
             {% endfor %}
         {% endfor %}
     </div>
-    <h4>{{  app.user.prenom }} {{ app.user.nom }}</h4>
+    <h4 class="title-profil">{{  app.user.prenom }} {{ app.user.nom }} </h4> <br>
     {% if app.user.photo %}
     <img src="{{ asset(app.user.photo) }}" alt="" class="profile_image">
     {% endif %}
-    {{ form_start(modifProfilForm) }}
-    {{ form_label(modifProfilForm.pseudo, "Pseudo") }} <span class="text-danger">*</span>
-    {{ form_widget(modifProfilForm.pseudo) }}
-    {{ form_label(modifProfilForm.email, "Email") }} <span class="text-danger">*</span>
-    {{ form_widget(modifProfilForm.email) }}
-    {{ form_row(modifProfilForm.telephone) }}
-    {{ form_row(modifProfilForm.photo) }}
-    <div class="mb-3">
-        <label for=     "verifPassword" class="form-label required">Mot de passe <span class="text-danger">*</span></label>
-        <input type=    "password"
-               id=      "verifPassword"
-               name=    "verifPassword"
-               required="required"
-               maxlength=""
-               class=   "form-control"
-               value="">
+    <div class="input-profil">
+        {{ form_start(modifProfilForm) }}
+        {{ form_label(modifProfilForm.pseudo, "Pseudo") }} <span class="text-danger">*</span>
+        {{ form_widget(modifProfilForm.pseudo) }}
+        {{ form_label(modifProfilForm.email, "Email") }} <span class="text-danger">*</span>
+        {{ form_widget(modifProfilForm.email) }}
+        {{ form_row(modifProfilForm.telephone) }}
+        {{ form_row(modifProfilForm.photo) }}
+        <div class="mb-3">
+            <label for=     "verifPassword" class="form-label required">Mot de passe <span class="text-danger">*</span></label>
+            <input type=    "password"
+                   id=      "verifPassword"
+                   name=    "verifPassword"
+                   required="required"
+                   maxlength=""
+                   class=   "form-control"
+                   value="">
     </div>
     <div class="button_row d-flex mt-5  justify-content-between">
         {{ form_row(modifProfilForm.submit, {'attr': {'class': ' btn-success'}}) }}
         <a href="/"> {{ form_row(modifProfilForm.Annuler,  {'attr': {'class': ' btn-danger'}}) }}</a>
         <a href="/monProfil/changer-motdepasse">{{ form_row(modifProfilForm.ModifMDP,  {'attr': {'class': ' btn-primary'}} )}}</a>
     </div>
-
+        </div>
     {{ form_rest(modifProfilForm)}}
 
 
