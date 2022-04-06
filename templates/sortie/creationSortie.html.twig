@@ -1,9 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Creation Sortie{% endblock %}
-
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/creationSortie.css') }}">
+{% endblock %}
 {% block body %}
-    <div class="border rounded p-4 offset-2 col-8 shadow">
+    <div class="border rounded p-4 offset-2 col-8 shadow  creationSortieForm">
         <h3 class="text-center p-4">Organiser votre sortie</h3>
 
         <div class="row text-center">
