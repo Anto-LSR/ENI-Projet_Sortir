@@ -5,7 +5,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/creationSortie.css') }}">
 {% endblock %}
 {% block body %}
-    <div class="border rounded p-4 offset-2 col-8 shadow  creationSortieForm">
+    <div class="border rounded p-4 offset-3 col-6 ombre mb-5">
+
         <h3 class="text-center p-4">Organiser votre sortie</h3>
 
         <div class="row text-center">
@@ -19,58 +20,53 @@
         </div>
 
         {{ form_start(sortieForm) }}
+        <div class="row text d-flex justify-content-center">
+                <div class="col-5">
+                    {{ form_row(sortieForm.nom) }}
+                    {{ form_row(sortieForm.dateHeureDebut) }}
+                    {# {{ form_row(sortieForm.duree) }} #}
 
-        {{ form_row(sortieForm.nom) }}
-        {{ form_row(sortieForm.dateHeureDebut) }}
-        {# {{ form_row(sortieForm.duree) }} #}
+                    {{ form_label(sortieForm.duree) }}
+                    {{ form_widget(sortieForm.duree) }}
+                    {{ form_errors(sortieForm.duree) }}
 
-        {{ form_label(sortieForm.duree) }}
-        {{ form_widget(sortieForm.duree) }}
-        {{ form_errors(sortieForm.duree) }}
+                    {# <div class="invalid-feedback d-block">protu</div> #}
+                    {{ form_row(sortieForm.dateLimiteInscription) }}
 
+                </div>
+                <div class="col-5">
+                    {{ form_row(sortieForm.nbInscriptionsMax) }}
+                    <div class="ville_container d-flex justify-content-between">
+                        <div class="mb-3 ville_input">
+                            <label class="form-label required" for="ville">Ville</label>
+                            <select class="form-control" name="ville" id="ville"></select>
+                        </div>
+                    </div>
 
-
-        {# <div class="invalid-feedback d-block">protu</div> #}
-        {{ form_row(sortieForm.dateLimiteInscription) }}
-        {{ form_row(sortieForm.nbInscriptionsMax) }}
-        {{ form_row(sortieForm.infoSortie) }}
-
-        <div class="ville_container d-flex justify-content-between">
-            <div class="mb-3 ville_input">
-                <label class="form-label required" for="ville">Ville</label>
-                <select class="form-control" name="ville" id="ville">
-
-
-                </select>
-
-            </div>
-
-        </div>
-
-        <div class="lieu_container  justify-content-between">
-            <label class="form-label required" for="lieu">Lieu</label>
-            <div class="mb-3 lieu_input d-flex align-items-center">
-
-                <select class="form-control" name="lieu" id="lieu">
-
-
-                </select>
-                <button type="button" class="btn-primary btn_lieu"  data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
-            </div>
-
-
-        </div>
-        <div class="button_row d-flex mt-5  justify-content-around">
-
-            {{ form_row(sortieForm.Enregistrer) }}
-            {{ form_row(sortieForm.Publier,{}) }}
+                    <div class="lieu_container justify-content-between">
+                        <label class="form-label required" for="lieu">Lieu</label>
+                        <div class="mb-3 lieu_input d-flex align-items-center">
+                            <select class="form-control" name="lieu" id="lieu"></select>
+                            <button type="button" class="btn-primary btn_lieu" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-10">
+                    {{ form_row(sortieForm.infoSortie) }}
+                </div>
             <div>
-                <a href="{{ path("app_main") }}" class="btn btn-primary" >Annuler</a>
+                <div class="button_row d-flex mt-3  justify-content-around">
+
+                    {{ form_row(sortieForm.Enregistrer) }}
+                    {{ form_row(sortieForm.Publier,{}) }}
+                    <div>
+                        <a href="{{ path("app_main") }}" class="btn btn-primary" >Annuler</a>
+                    </div>
+                </div>
             </div>
         </div>
-
         {{ form_end(sortieForm) }}
 
 
