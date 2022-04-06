@@ -204,6 +204,10 @@ header {
         display: none !important;
     }
 
+    .desktopHidden{
+        display: block !important;
+    }
+
     .filters{
         display: none;
     }
@@ -276,5 +280,23 @@ header {
     border-color: #233940 !important;
 }
 
+.desktopHidden{
+    display: none;
+}
+
+input, select ,textarea{
+    box-shadow: inset 4px 2px 7px 0px #d7d2d2;
+}
+input[type=checkbox]{
+    box-shadow: none;
+}
+.form-check-input:checked {
+    background-color: #233940 !important;
+    border-color: #233940 !important;
+}
+
+img{
+    filter: drop-shadow(2px 4px 6px black);
+}
 
 
