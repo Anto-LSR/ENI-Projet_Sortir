@@ -9,6 +9,7 @@ use App\Entity\Sortie;
 use App\Entity\Ville;
 use App\Form\AjoutLieuType;
 use App\Form\CreationSortieType;
+use App\Form\CSVRegisterType;
 use App\Form\ModifSortieType;
 use App\Repository\EtatRepository;
 use App\Repository\LieuRepository;
@@ -151,9 +152,8 @@ class SortieController extends AbstractController
         $serializer = new Serializer($normalizers, $encoders);
 
         $villes = $villeRepo->findAll();
-        $jsonVilles = array();
         $lieux = $lieuRepo->findAll();
-        $jsonLieux = array();
+        $jsonVilles = array();
 
         for ($i = 0; $i <= sizeof($villes) - 1; $i++) {
             $jsonVilles[$i]["nomVille"] = $villes[$i]->getNomVille();
@@ -164,9 +164,7 @@ class SortieController extends AbstractController
             $k = 0;
             for ($j = 0; $j <= sizeof($lieux) - 1; $j++) {
                 $lieu_ville = $lieux[$j]->getVille();
-
                 if ($idVille == $lieu_ville->getId()) {
-
                     $jsonVilles[$i]["lieux"][$k]["id"] = $lieux[$j]->getId();
                     $jsonVilles[$i]["lieux"][$k]["nom"] = $lieux[$j]->getNomLieu();
                     $jsonVilles[$i]["lieux"][$k]["rue"] = $lieux[$j]->getRue();
@@ -175,10 +173,11 @@ class SortieController extends AbstractController
                     $jsonVilles[$i]["lieux"][$k]["villeId"] = $villes[$i]->getId();
                     $k++;
                 }
-            }
+            } //On charge un tableau avec les informations des villes
+                                                              // et de leurs lieux
         }
         $jsonContent = json_encode($jsonVilles);
-        return $this->json($jsonContent);
+        return $this->json($jsonContent);   //On retourne le tableau au format JSON
     }
 
     /**
@@ -348,15 +347,6 @@ class SortieController extends AbstractController
         return true;
     }
 
-    /**
-     * @Route("/mesSorties/", name="app_mesSortie")
-     */
-    public function mesSorties(SortieRepository $sortieRepo, Request $request, ParticipantRepository $partRepo):Response
-    {
-        $user = $this->getUser();
-        $sorties = $this->sortieRepo->findAll();
 
-        return $this->render('sortie/mesSorties.html.twig', compact('sorties'));
-    }
 
     }

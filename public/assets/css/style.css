@@ -10,7 +10,7 @@ body{
 }
 
 .table a{
-    color: #68c7de !important;
+    color: #53a5c1;
 }
 
 .navbar-collapse{
@@ -93,11 +93,16 @@ body{
 header {
     margin-bottom: 5vh;
     background: rgb(33,37,41);
-    background-image: linear-gradient(0deg, rgba(33,37,41,1) 15%, rgb(83 155 175) 26%);
+    /*background-image: linear-gradient(0deg, rgba(33,37,41,1) 15%, rgb(83 155 175) 26%);*/
     background-repeat: no-repeat;
     background-position: center;
+    background: #233940;
+    box-shadow: 1px 7px 17px 2px #00000091;
 }
 
+.test{
+    background-image: url("/assets/img/banniere-admin.png"),linear-gradient(0deg, rgba(33,37,41,1) 15%, rgba(51,79,196,1) 26%);
+}
 .option{
     display: flex;
     justify-content: space-between;
@@ -113,7 +118,6 @@ header {
 .filtres {
     display: flex;
     justify-content: space-around;
-    padding-top: 3vh;
 }
 
 .btn-width{
@@ -126,19 +130,19 @@ header {
     align-items: end;
 }
 
-.cadre{
-    border-style: groove;
-    padding: 2%;
-    width: 70vw;
-}
+/*.cadre{*/
+/*    border-style: groove;*/
+/*    padding: 2%;*/
+/*    width: 70vw;*/
+/*}*/
 
 .champs label{
     white-space: nowrap;
 }
 
-.ombre{
-    box-shadow: 5px 5px 10px #5fb6ce;
-}
+/*.ombre{*/
+/*    box-shadow: 5px 5px 10px #5fb6ce;*/
+/*}*/
 
 .cadre-login{
     text-align: center;
@@ -163,7 +167,8 @@ header {
     color:#ffffff;
 }
 .nav-item a:hover{
-    color: #feff00;
+    color: #212529;
+    transition: all 300ms ease;
 }
 
 .btn_lieu{
@@ -206,7 +211,7 @@ header {
     .navbarMobile{
        position: absolute;
         right: 0;
-        background: #334fc4;
+        background: #233940;
         padding-right: 33px;
         padding-left: 16px;
         border-radius: 0px 0px 16px 16px;
@@ -219,10 +224,6 @@ header {
 
     .navbarMobile li{
         margin-left: 15px;
-    }
-
-    .desktopHidden{
-        display:block !important;
     }
     /*.table>:not(caption)>*>* {*/
     /*    padding: 0.2rem 0.2rem !important;*/
@@ -269,9 +270,9 @@ header {
     align-items: center;
 }
 
-.desktopHidden{
-    display:none
+.btn-primary{
+    color: #fff;
+    background-color: #233940 !important;
+    border-color: #233940 !important;
 }
-
-
 

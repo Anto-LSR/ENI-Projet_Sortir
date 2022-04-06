@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription CSV{% endblock %}
+
+{% block body %}
+
+    <div class="example-wrapper d-flex flex-column align-items-center">
+
+        <div>
+            <h1 class="mb-5 mt-5">Inscription CSV</h1>
+        </div>
+        <div class="row text-center">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+{#{{ form(csvForm) }}#}
+{#        <div>#}
+{#            <button type="submit" class="btn btn-primary mt-3">Valider</button>#}
+{#        </div>#}
+        <form action="{{ path('app_register_csv') }}" method="POST">
+            <input type="file" name="csv">
+            <button type="submit" class="btn btn-primary">Valider</button>
+        </form>
+
+    </div>
+
+{% endblock %}
