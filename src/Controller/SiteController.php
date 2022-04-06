@@ -19,6 +19,8 @@ class SiteController extends AbstractController
      */
     public function ajoutSite(Request $request, SiteRepository $siteRepo, EntityManagerInterface $em): Response
     {
+
+        if($this->getUser()->getAdministrateur() == true){
             //creation du formulaire
             $site = new Site();
             $ajoutSiteForm = $this->createForm(SiteType::class, $site);
@@ -27,16 +29,14 @@ class SiteController extends AbstractController
             if ($ajoutSiteForm->isSubmitted() && $ajoutSiteForm->isValid()) {
 
                 //verification si le site existe déjà
-                //je recupère ce que l'administrateur saisi
+                //On récupère ce que l'administrateur saisi
                 $nomSite = $site->getNomSite();
 
-                //On hydrate l'attribut nomSite avec ce que l'utilisateur à saisi
+                //On hydrate l'attribut 'nomSite' avec ce que l'administrateur à saisi
                 $site->setNomSite($nomSite);
                 $nomSite = $site->getNomSite();
-
-
+                //On recherche le nom du site saisir dans le Repository
                 $siteName = $siteRepo->findOneBy(['nomSite' => $nomSite]);
-
 
                 if($siteName == null){
                     $this->addFlash("success", "Site ajouté");
@@ -50,6 +50,10 @@ class SiteController extends AbstractController
 
             return $this->render('site/index.html.twig', ["ajoutSiteForm" => $ajoutSiteForm->createView()]);
 
+        }else{
+            return $this->redirectToRoute('app_login');
+        }
+
     }
 
     /**
@@ -57,17 +61,20 @@ class SiteController extends AbstractController
      */
     public function listeSites(SiteRepository $siteRepo, Request $request): Response
     {
+        //securisation : page accessible seulement pour l'administrateur
+        if($this->getUser()->getAdministrateur() == true){
+            $sites = $siteRepo->findAll();
 
-        $sites = $siteRepo->findAll();
+            if ($_POST) {
+                $recherche = $_POST['rechercher'];
+                $sites = $siteRepo->selectByFilters($recherche);
+            }
+            return $this->render('site/listeSites.html.twig', compact('sites'));
 
-        if ($_POST) {
-            $recherche = $_POST['rechercher'];
-            //dd($recherche);
-            $sites = $siteRepo->selectByFilters($recherche);
+        }else{
+            return $this->redirectToRoute('app_login');
         }
 
-
-        return $this->render('site/listeSites.html.twig', compact('sites'));
     }
 
     /**
@@ -76,23 +83,29 @@ class SiteController extends AbstractController
     public function suppSite(SiteRepository $siteRepo, Request $request, $id, EntityManagerInterface $em): Response
     {
 
-        $site = $siteRepo->find($id);
-        $participants = $site->getParticipants();
-        $i = 0;
-        foreach ($participants as $participant) {
-            $i++;
+        if($this->getUser()->getAdministrateur() == true){
+            $site = $siteRepo->find($id);
+            $participants = $site->getParticipants();
+            $i = 0;
+            foreach ($participants as $participant) {
+                $i++;
+            }
+            if($i == 0){
+                $em->remove($site);
+                $em->flush();
+                $this->addFlash("success", "Le site a été supprimé avec succès");
+
+            } else {
+                $this->addFlash("danger", "Impossible de supprimer ce site car il comprend des utilisateurs");
+            }
+
+
+            return $this->redirectToRoute('app_listeSites', ['id' => $id, 'site' => $site]);
+
+        }else{
+            return $this->redirectToRoute('app_login');
         }
-        if($i == 0){
-            $em->remove($site);
-            $em->flush();
-            $this->addFlash("success", "Le site a été supprimé avec succès");
 
-        } else {
-            $this->addFlash("danger", "Impossible de supprimer ce site car il comprend des utilisateurs");
-        }
-
-
-        return $this->redirectToRoute('app_listeSites', ['id' => $id, 'site' => $site]);
     }
 
 
