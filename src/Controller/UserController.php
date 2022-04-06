@@ -68,23 +68,26 @@ class UserController extends AbstractController
         if ($modifProfilForm->isSubmitted() && $modifProfilForm->isValid()) {
             $password = $_POST["verifPassword"];
             $isCorrect = password_verify($password, $oldPassword);
-            $photo = $modifProfilForm['photo']->getData();
-            $extension = $photo->guessExtension();
-            if ($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'gif') {
-                $originalFilename = pathinfo($photo->getClientOriginalName());
-                $safeFileName = $slugger->slug($originalFilename["filename"]);
-                $newFileName = $safeFileName . '-' . uniqid() . '.' . $photo->guessExtension();
-                try {
-                    $photo->move($this->getParameter('uploads'),
-                        $newFileName);
-                    $path = '/uploads/' . $newFileName;
+            if($modifProfilForm['photo']->getData()){
+                $photo = $modifProfilForm['photo']->getData();
+                $extension = $photo->guessExtension();
+                if ($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'gif') {
+                    $originalFilename = pathinfo($photo->getClientOriginalName());
+                    $safeFileName = $slugger->slug($originalFilename["filename"]);
+                    $newFileName = $safeFileName . '-' . uniqid() . '.' . $photo->guessExtension();
+                    try {
+                        $photo->move($this->getParameter('uploads'),
+                            $newFileName);
+                        $path = '/uploads/' . $newFileName;
 
-                    $user = $partRepo->find($this->getUser()->getId());
-                    $user->setPhoto($path);
+                        $user = $partRepo->find($this->getUser()->getId());
+                        $user->setPhoto($path);
 
-                } catch (FileException $e) {
+                    } catch (FileException $e) {
 
-                }
+                    }
+            }
+
 
                 //$photo->move($this->getParameter('uploads'), 'profile_picture'.rand(1, 99999).'.'.$extension);
             }
