@@ -106,7 +106,6 @@ class SortieController extends AbstractController
         $sortie = $this->sortieRepo->find($id);
         $participants = $sortie->getParticipants();
 
-
         foreach ($participants as $participant){
             if($participant == $this->getUser()){
                 $canUnsubscribe = true;
@@ -116,7 +115,6 @@ class SortieController extends AbstractController
         if ($canUnsubscribe == false ){
             $canSubscribe = true;
         }
-
 
         if($sortie->getDateHeureDebut() < $now){
             $eventStarted = true;
@@ -135,9 +133,7 @@ class SortieController extends AbstractController
         $sites = $siteRepo->findAll();
         $lieux = $lieuRepo->findAll();
         $villes = $villeRepo->findAll();
-        //dd($sites);
-        //dd($sortie);
-        //dd($lieux);
+
         return $this->render('sortie/detailSortie.html.twig', compact("sortie", "sites", "lieux", "villes", "canSubscribe", "canUnsubscribe", "impossibleSubscription","eventStarted", "showCancelBtn"));
     }
 
