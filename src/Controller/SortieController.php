@@ -348,4 +348,37 @@ class SortieController extends AbstractController
         return true;
     }
 
+    /**
+     * @Route("/mesSorties/", name="app_mesSortie")
+     */
+    public function mesSorties(SortieRepository $sortieRepo, Request $request, ParticipantRepository $partRepo):Response
+    {
+        $user = $this->getUser();
+        $sorties = $this->sortieRepo->findAll();
+       // $participants = $partRepo->findAll();
+//        foreach ($sorties as $sortie){
+//            foreach($sortie.participants as $participant){
+//                if($user == $participant ){
+//
+//                }
+//            }
+//        }
+
+        //$part = $sorties->getParticipants();
+        //dd($part);
+
+
+
+//        $id = $this->getUser()->getId();
+//        //dd($id);
+//        $organisateur = $this->getOrganisateur();
+//        dd($organisateur);
+//
+//        $sorties = $sortieRepo->findBy(['organisateur' => $organisateur]);
+//        dd($sorties);
+
+
+        return $this->render('sortie/mesSorties.html.twig', compact('sorties'));
+    }
+
     }
