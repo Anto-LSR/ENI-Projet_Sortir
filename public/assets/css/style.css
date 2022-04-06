@@ -98,9 +98,6 @@ header {
     background-position: center;
 }
 
-.test{
-    background-image: url("/assets/img/banniere-admin.png"),linear-gradient(0deg, rgba(33,37,41,1) 15%, rgba(51,79,196,1) 26%);
-}
 .option{
     display: flex;
     justify-content: space-between;
