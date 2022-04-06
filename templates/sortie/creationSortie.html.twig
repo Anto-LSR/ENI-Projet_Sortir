@@ -21,7 +21,7 @@
 
         {{ form_start(sortieForm) }}
         <div class="row text d-flex justify-content-center">
-                <div class="col-5">
+                <div class="col col-lg-5 col-md-12 col-ms-12">
                     {{ form_row(sortieForm.nom) }}
                     {{ form_row(sortieForm.dateHeureDebut) }}
                     {# {{ form_row(sortieForm.duree) }} #}
@@ -34,7 +34,7 @@
                     {{ form_row(sortieForm.dateLimiteInscription) }}
 
                 </div>
-                <div class="col-5">
+                <div class="col col-lg-5 col-md-12 col-ms-12">
                     {{ form_row(sortieForm.nbInscriptionsMax) }}
                     <div class="ville_container d-flex justify-content-between">
                         <div class="mb-3 ville_input">
@@ -57,11 +57,14 @@
                     {{ form_row(sortieForm.infoSortie) }}
                 </div>
             <div>
-                <div class="button_row d-flex mt-3  justify-content-around">
-
-                    {{ form_row(sortieForm.Enregistrer) }}
-                    {{ form_row(sortieForm.Publier,{}) }}
-                    <div>
+                <div class="row mt-3 text-center">
+                    <div class="col col-lg-4 col-md-12 col-sm-12">
+                        {{ form_row(sortieForm.Enregistrer) }}
+                    </div>
+                    <div class="col col-lg-4 col-md-12 col-sm-12">
+                        {{ form_row(sortieForm.Publier,{}) }}
+                    </div>
+                    <div class="col col-lg-4 col-md-12 col-sm-12">
                         <a href="{{ path("app_main") }}" class="btn btn-primary" >Annuler</a>
                     </div>
                 </div>
