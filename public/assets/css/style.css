@@ -220,6 +220,10 @@ header {
     .navbarMobile li{
         margin-left: 15px;
     }
+
+    .desktopHidden{
+        display:block !important;
+    }
     /*.table>:not(caption)>*>* {*/
     /*    padding: 0.2rem 0.2rem !important;*/
     /*}*/
@@ -264,4 +268,10 @@ header {
     flex-direction: column;
     align-items: center;
 }
+
+.desktopHidden{
+    display:none
+}
+
+
 
