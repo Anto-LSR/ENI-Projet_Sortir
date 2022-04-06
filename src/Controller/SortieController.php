@@ -346,7 +346,16 @@ class SortieController extends AbstractController
         }
         return true;
     }
+    /**
+     * @Route("/mesSorties/", name="app_mesSortie")
+     */
+    public function mesSorties(SortieRepository $sortieRepo, Request $request, ParticipantRepository $partRepo):Response
+    {
+        $user = $this->getUser();
+        $sorties = $this->sortieRepo->findAll();
 
+        return $this->render('sortie/mesSorties.html.twig', compact('sorties'));
+    }
 
 
     }

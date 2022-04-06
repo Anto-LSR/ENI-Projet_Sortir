@@ -43,6 +43,8 @@ security:
         # - { path: ^/profile, roles: ROLE_USER }
         - { path: ^/profil, roles: ROLE_USER }
         - { path: ^/site, roles: ROLE_ADMIN }
+        - { path: ^/listeSites, roles: ROLE_ADMIN }
+        - { path: ^/suppSites, roles: ROLE_ADMIN }
 
 when@test:
     security:

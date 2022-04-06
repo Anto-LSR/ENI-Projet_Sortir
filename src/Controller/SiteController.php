@@ -19,25 +19,21 @@ class SiteController extends AbstractController
      */
     public function ajoutSite(Request $request, SiteRepository $siteRepo, EntityManagerInterface $em): Response
     {
+            //creation du formulaire
+            $site = new Site();
+            $ajoutSiteForm = $this->createForm(SiteType::class, $site);
+            $ajoutSiteForm->handleRequest($request);
 
-        if ($this->isGranted('ROLE_USER') == false) {
-            return $this->redirectToRoute("app_login");
-        }
+            if ($ajoutSiteForm->isSubmitted() && $ajoutSiteForm->isValid()) {
 
-        $site = new Site();
-        $ajoutSiteForm = $this->createForm(SiteType::class, $site);
-        $ajoutSiteForm->handleRequest($request);
-
-        if ($ajoutSiteForm->isSubmitted() && $ajoutSiteForm->isValid()) {
-
-            //verification si le site existe déjà
+                //verification si le site existe déjà
                 //je recupère ce que l'administrateur saisi
                 $nomSite = $site->getNomSite();
 
-                //On hydrate l'attribu
+                //On hydrate l'attribut nomSite avec ce que l'utilisateur à saisi
                 $site->setNomSite($nomSite);
                 $nomSite = $site->getNomSite();
-                //dd($nomSite);
+
 
                 $siteName = $siteRepo->findOneBy(['nomSite' => $nomSite]);
 
@@ -50,9 +46,10 @@ class SiteController extends AbstractController
                 }
 
                 $em->flush();
-        }
+            }
 
-        return $this->render('site/index.html.twig', ["ajoutSiteForm" => $ajoutSiteForm->createView()]);
+            return $this->render('site/index.html.twig', ["ajoutSiteForm" => $ajoutSiteForm->createView()]);
+
     }
 
     /**
