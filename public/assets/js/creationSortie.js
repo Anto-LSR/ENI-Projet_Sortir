@@ -8,7 +8,6 @@
         document.getElementById('ajout_lieu_longitude').value = ''
     })
 
-    //*****AJOUTER LIEU******
     getVilles().then(data => {
         let villeSelect = document.getElementById("ville")
         let selectedVille = villeSelect.value
@@ -16,12 +15,8 @@
 
         const selectVille = document.getElementById('ville')
         selectVille.addEventListener('change', () => {
-
             let selectedVille = villeSelect.value
-
             getLieux(selectedVille, data)
-
-
         })
 
         const addBtn = document.getElementById('addLieuBtn')
@@ -41,8 +36,6 @@
                 longitude: longitude,
                 ville: villeSelected,
             }
-            let selectedVille = villeSelect.value
-
 
             await fetch('/addLieu', {
                     method: 'POST',
@@ -53,7 +46,11 @@
                 }
             )
             data = await getVilles()
+            //Envoi d'une requète pour ajouter le lieu en base de données
 
+
+
+            let selectedVille = villeSelect.value
             getLieux(selectedVille, data)
 
 
@@ -70,13 +67,9 @@
 
 
     async function getVilles() {
-    //**********************************
-    //Récupérer les données depuis la DB
-
-    const data = await fetch('/getVilles')
-    let villes = JSON.parse(await data.json())
-    console.log(villes);
-
+    const data = await fetch('/getVilles') // Ici on envoie une requête au controller qui gère '/getVilles'
+    let villes = JSON.parse(await data.json())  //  Le controller nous renvoie une réponse au format json qui
+    //...                                      //   contient toutes les villes et les lieux en base
 
     //**********************************
     //Afficher les villes dans le select

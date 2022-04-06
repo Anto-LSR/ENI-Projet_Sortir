@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Participant;
+use App\Form\CSVRegisterType;
 use App\Form\ModifProfilType;
 use App\Form\UpdatePasswordType;
 use App\Repository\ParticipantRepository;
@@ -206,6 +207,34 @@ class UserController extends AbstractController
 
     }
 
+//    /**
+//     * @Route("/inscription-csv", name="app_register_csv")
+//     */
+//    public function csvForm(Request $request, SluggerInterface $slugger): Response
+//    {
+//        if ($_POST) {
+//            dd($request);
+//            dd(gettype($csv));
+//            dd(($csv->getClientOriginalName()));
+//            $originalFileName = pathinfo(($csv->getClientOriginalName()));
+//            $safeFileName = $slugger->slug($originalFileName["filename"]);
+//            $newFileName = $safeFileName . '-' . uniqid() . '.' . 'csv';
+//            try {
+//                $csv->move($this->getParameter('csv'), $newFileName);
+//                $path = '/csv/' . $newFileName;
+//                $stream = fopen($csv);
+//                $handle = @fopen($path, "r");
+//                $csvToArray = fgetcsv($handle);
+//                dd($csvToArray);
+//
+//            } catch (FileException $e) {
+//
+//            }
+//        }
+//
+//
+//        return $this->render('registration/inscription_csv.html.twig');
+//    }
 
 
 }
