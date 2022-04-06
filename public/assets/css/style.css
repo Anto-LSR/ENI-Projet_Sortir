@@ -4,6 +4,9 @@ html{
 
 body{
     background: #343f4d;
+    min-width: 100vw;
+    min-height: 100vh;
+    overflow-x: hidden ;
 }
 
 .table a{
@@ -129,7 +132,7 @@ header {
 .cadre{
     border-style: groove;
     padding: 2%;
-    width: 70vw !important;
+    width: 70vw;
 }
 
 .champs label{
@@ -192,6 +195,9 @@ header {
 }
 
 @media screen and (max-width: 500px){
+    body{
+        overflow-x: hidden;
+    }
     .mobileHidden{
         display: none !important;
     }
@@ -217,14 +223,48 @@ header {
     .navbarMobile li{
         margin-left: 15px;
     }
+    /*.table>:not(caption)>*>* {*/
+    /*    padding: 0.2rem 0.2rem !important;*/
+    /*}*/
+    /*th{*/
+    /*    white-space: nowrap;*/
+    /*}*/
+
+.cadre{
+    width: auto;
+    margin: 0;
+
 }
 
-th{
-    white-space: nowrap;
+.modifProfil{
+    margin: 0;
 }
+}
+
+
 
 .oldLogo img{
     position: absolute;
     top: 7px;
+}
+
+.checkboxWrapper{
+    display: flex;
+    gap: 10px;
+}
+
+
+.navbar-collapse{
+    z-index: 35;
+}
+
+.profile_image{
+    width: 100px;
+}
+
+.modifProfil{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
