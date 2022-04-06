@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Site;
 use App\Form\SiteType;
 use App\Repository\SiteRepository;
+use ContainerR7Fm6Jy\getSiteRepositoryService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,15 +29,28 @@ class SiteController extends AbstractController
         $ajoutSiteForm->handleRequest($request);
 
         if ($ajoutSiteForm->isSubmitted() && $ajoutSiteForm->isValid()) {
-            $nomSite = $site->getNomSite();
-            $site->setNomSite($nomSite);
 
-            $this->addFlash("success", "Site ajouté");
+            //verification si le site existe déjà
+                //je recupère ce que l'administrateur saisi
+                $nomSite = $site->getNomSite();
 
-            $em->persist($site);
-            $em->flush();
+                //On hydrate l'attribu
+                $site->setNomSite($nomSite);
+                $nomSite = $site->getNomSite();
+                //dd($nomSite);
+
+                $siteName = $siteRepo->findOneBy(['nomSite' => $nomSite]);
+
+
+                if($siteName == null){
+                    $this->addFlash("success", "Site ajouté");
+                    $em->persist($site);
+                } else{
+                    $this->addFlash("danger", "Ce site existe déjà");
+                }
+
+                $em->flush();
         }
-
 
         return $this->render('site/index.html.twig', ["ajoutSiteForm" => $ajoutSiteForm->createView()]);
     }
@@ -46,9 +60,6 @@ class SiteController extends AbstractController
      */
     public function listeSites(SiteRepository $siteRepo, Request $request): Response
     {
-//        if($this->isGranted('ROLE_USER') == false){
-//            return $this->redirectToRoute("app_login");
-//        }
 
         $sites = $siteRepo->findAll();
 
@@ -77,6 +88,8 @@ class SiteController extends AbstractController
         if($i == 0){
             $em->remove($site);
             $em->flush();
+            $this->addFlash("success", "Le site a été supprimé avec succès");
+
         } else {
             $this->addFlash("danger", "Impossible de supprimer ce site car il comprend des utilisateurs");
         }

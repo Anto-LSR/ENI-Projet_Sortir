@@ -57,6 +57,9 @@
                             <li class="nav-item mobileHidden">
                                 <a class="nav-link" href="{{ path("app_sortie" ) }}">Nouvelle Sortie</a>
                             </li>
+                            <li class="nav-item desktopHidden">
+                                <a class="nav-link" href="{{ path("app_mesSortie" ) }}">Mes Sorties</a>
+                            </li>
                         {% endif %}
 
                         {% if is_granted('ROLE_ADMIN') %}
