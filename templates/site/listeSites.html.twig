@@ -3,52 +3,63 @@
 {% block title %}Affichage Sites{% endblock %}
 
 {% block body %}
-
-    <h3 class="text-center mt-5 mb-5">Gestion des sites</h3>
-    <div class="row text-center">
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }}">
-                    {{ message }}
-                </div>
+    <div class="container-fluid">
+        <h3 class="text-center mt-5 mb-5">Gestion des sites</h3>
+        <div class="row text-center">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    </div>
-    <table class="table table-striped table-dark text-center">
+        </div>
 
-        <h4>Filtrer les sites</h4>
-        <form method="post">
-            <label for="rechercher" class="form-label">Le nom contient : </label>
-            <input type="search" id="rechercher" class="form-control col-4" name="rechercher">
 
-            <button type="submit" class="btn btn-primary">Rechercher</button>
+            <h4>Filtrer les sites</h4>
 
-        </form>
 
-        <thead>
-        <th>Nom</th>
-        <th>Supprimer</th>
+            <div class="formFilter">
+                <form method="post" class="mb-5">
 
-        </thead>
+                    <div class="row">
+                        <div class="col col-lg-4">
+                            <input type="search" id="rechercher" class="form-control col-4 mt-3" placeholder="Rechercher un site" name="rechercher">
+                        </div>
+                        <div class="col col-lg-6">
+                            <button type="submit" class="btn btn-primary mt-3">Rechercher</button>
+                        </div>
+                    </div>
 
-        <tbody>
-        {% for site in sites %}
 
+                </form>
+            </div>
+
+        <table class="table table-striped table-dark text-center">
+            <thead>
+            <th>Nom</th>
+            <th>Supprimer</th>
+
+            </thead>
+
+            <tbody>
+            {% for site in sites %}
+
+                <tr>
+                    <td><h5>{{ site.nomSite |capitalize }}</h5></td>
+                    <td><a href="{{ path('app_suppressionSite', {id:site.id}) }}"><i class="fa-solid fa-trash"></i></a></td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+            <tfoot>
             <tr>
-                <td><h5>{{ site.nomSite |capitalize }}</h5></td>
-                <td><a href="{{ path('app_suppressionSite', {id:site.id}) }}"><i class="fa-solid fa-trash"></i></a></td>
+                <th scope="row" style="color: #68c7de">Ajouter un nouveau site</th>
+                <td><a href="{{ path('app_site') }}"><i class="fa-solid fa-plus bg-secondary p-3 rounded"></i></a></td>
             </tr>
-
-        {% endfor %}
-
-        </tbody>
-
-        <tfoot>
-        <tr>
-            <th scope="row" style="color: #68c7de">Ajouter un nouveau site</th>
-            <td><a href="{{ path('app_site') }}"><i class="fa-solid fa-plus bg-secondary p-3 rounded"></i></a></td>
-        </tr>
-        </tfoot>
-    </table>
-
+            </tfoot>
+        </table>
+    </div>
 {% endblock %}
