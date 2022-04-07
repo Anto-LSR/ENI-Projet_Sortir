@@ -25,6 +25,10 @@ class MainController extends AbstractController
             return $this->redirectToRoute("app_login");
         }
 
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
+
         $sites = $siteRepo->findAll();
         $sorties = $sortieRepo->findAll();
         $participants = $participantsRepo->findAll();
@@ -54,7 +58,7 @@ class MainController extends AbstractController
             }
 
             $sortiePassee = false;
-            if(isset($_POST['sortiePasse'])){
+            if(isset($_POST['sortiePassee'])){
                 $sortiePassee = true;
             }
            $sorties = $sortieRepo->selectByFilters($user, $recherche, $site, $dateDebut, $dateFin, $jeSuisOrganisateur, $jeSuisInscrit, $jeSuisPasInscrit, $sortiePassee);

@@ -19,6 +19,9 @@ class SiteController extends AbstractController
      */
     public function ajoutSite(Request $request, SiteRepository $siteRepo, EntityManagerInterface $em): Response
     {
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
 
         if($this->getUser()->getAdministrateur() == true){
             //creation du formulaire
@@ -61,6 +64,9 @@ class SiteController extends AbstractController
      */
     public function listeSites(SiteRepository $siteRepo, Request $request): Response
     {
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         //securisation : page accessible seulement pour l'administrateur
         if($this->getUser()->getAdministrateur() == true){
             $sites = $siteRepo->findAll();
@@ -82,7 +88,9 @@ class SiteController extends AbstractController
      */
     public function suppSite(SiteRepository $siteRepo, Request $request, $id, EntityManagerInterface $em): Response
     {
-
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         if($this->getUser()->getAdministrateur() == true){
             $site = $siteRepo->find($id);
             $participants = $site->getParticipants();

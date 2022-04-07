@@ -43,6 +43,9 @@ class SortieController extends AbstractController
      */
     public function creationSortie(Request $request, VilleRepository $villeRepo, LieuRepository $lieuRepo, EntityManagerInterface $em, SortieRepository $sortieRepo, EtatRepository $etatRepo): Response
     {
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
 
         $lieu = new Lieu();
         $ajoutLieuForm = $this->createForm(AjoutLieuType::class, $lieu);
@@ -97,6 +100,9 @@ class SortieController extends AbstractController
      */
     public function afficherDetailSortie($id, SiteRepository $siteRepo, LieuRepository $lieuRepo, VilleRepository $villeRepo): Response
     {
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         $user = $this->getUser();
         $canSubscribe = false;
         $canUnsubscribe = false;
@@ -147,6 +153,7 @@ class SortieController extends AbstractController
      */
     public function getVilles(VilleRepository $villeRepo, LieuRepository $lieuRepo): Response
     {
+
         $encoders = [new XmlEncoder(), new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
         $serializer = new Serializer($normalizers, $encoders);
@@ -185,6 +192,9 @@ class SortieController extends AbstractController
      */
     public function addLieu(Request $req, LieuRepository $lieuRepo, VilleRepository $villeRepo)
     {
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         $data = json_decode($req->getContent());
         $lieu = new Lieu();
         $ville = $villeRepo->find($data->ville);
@@ -202,6 +212,9 @@ class SortieController extends AbstractController
      */
     public function modifierSortie(Request $request, $id, EntityManagerInterface $em, SiteRepository $siteRepo, EtatRepository $etatRepo, LieuRepository $lieuRepo, VilleRepository $villeRepo): Response
     {
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         $sortie = new Sortie();
         $lieu = new Lieu();
 
@@ -255,7 +268,9 @@ class SortieController extends AbstractController
      */
     public function inscriptionSortie($id, ParticipantRepository $partRepo, EntityManagerInterface $em): Response
     {
-
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
 
         $sortie = $this->sortieRepo->find($id);
             if($sortie->isOpen()){
@@ -278,6 +293,9 @@ class SortieController extends AbstractController
      */
     public function desinscriptionSortie($id, ParticipantRepository $partRepo, EntityManagerInterface $em): Response
     {
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         $now = new \DateTime();
         $sortie = $this->sortieRepo->find($id);
         $participant = $this->getUser();
@@ -301,6 +319,9 @@ class SortieController extends AbstractController
      * @Route("/supprimerSortie/{id}", name="annulation_sortie", requirements={"id"="\d+"})
      */
     public function annulationSortie($id,  EntityManagerInterface $em, SortieRepository $sortieRepo): Response{
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         $sortie = $sortieRepo->find($id);
         $now = new \DateTime();
         if(($this->getUser() == $sortie->getOrganisateur() && $sortie->getDateHeureDebut() > $now)  || $this->getUser()->getAdministrateur() == true){
@@ -317,6 +338,9 @@ class SortieController extends AbstractController
      */
     public function confirmerAnnulationSortie($id,  EntityManagerInterface $em, SortieRepository $sortieRepo, EtatRepository $etatRepo): Response
     {
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         $now = new \DateTime();
         $sortie = $sortieRepo->find($id);
 
@@ -350,7 +374,9 @@ class SortieController extends AbstractController
      * @Route("/mesSorties/", name="app_mesSortie")
      */
     public function mesSorties(SortieRepository $sortieRepo, Request $request, ParticipantRepository $partRepo):Response
-    {
+    {if($this->isGranted('ROLE_DISABLED')){
+        return $this->redirectToRoute("app_disabled");
+    }
         $user = $this->getUser();
         $sorties = $this->sortieRepo->findAll();
 

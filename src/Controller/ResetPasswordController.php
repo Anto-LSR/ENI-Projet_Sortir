@@ -43,6 +43,9 @@ class ResetPasswordController extends AbstractController
      */
     public function request(Request $request, MailerInterface $mailer, TranslatorInterface $translator): Response
     {
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
 

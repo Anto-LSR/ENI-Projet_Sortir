@@ -34,6 +34,9 @@ class UserController extends AbstractController
      */
     public function afficherProfil($id, SiteRepository $siteRepo): Response
     {
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         $peutConsulterProfil = false;
         $visiteur = $this->getUser();
         $sortiesVisiteur = $visiteur->getSorties();
@@ -57,7 +60,9 @@ class UserController extends AbstractController
      */
     public function profil(ParticipantRepository $partRepo, SluggerInterface $slugger, Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $userPasswordHasher): Response
     {
-
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         //On récupère l'utilisateur connecté
         $user = $this->getUser();
         $oldPassword = $user->getPassword();
@@ -68,7 +73,7 @@ class UserController extends AbstractController
         if ($modifProfilForm->isSubmitted() && $modifProfilForm->isValid()) {
             $password = $_POST["verifPassword"];
             $isCorrect = password_verify($password, $oldPassword);
-            if($modifProfilForm['photo']->getData()){
+            if ($modifProfilForm['photo']->getData()) {
                 $photo = $modifProfilForm['photo']->getData();
                 $extension = $photo->guessExtension();
                 if ($extension == 'png' || $extension == 'jpg' || $extension == 'jpeg' || $extension == 'gif') {
@@ -86,7 +91,7 @@ class UserController extends AbstractController
                     } catch (FileException $e) {
 
                     }
-            }
+                }
 
 
                 //$photo->move($this->getParameter('uploads'), 'profile_picture'.rand(1, 99999).'.'.$extension);
@@ -118,6 +123,9 @@ class UserController extends AbstractController
      */
     public function updatePassword(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $em, ParticipantRepository $pr): Response
     {
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         //On récupère l'utilisateur
         $user = $this->getUser();
         //On récupère le mot de passe actuel de l'utilisateur
@@ -161,6 +169,9 @@ class UserController extends AbstractController
      */
     public function userManager(Request $request, ParticipantRepository $partRepo, PaginatorInterface $paginator): Response
     {
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         $users = $partRepo->findAll();
         $users = $paginator->paginate(
             $users,
@@ -176,8 +187,12 @@ class UserController extends AbstractController
      */
     public function disableUser($id, ParticipantRepository $partRepo, EntityManagerInterface $em): Response
     {
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         $user = $partRepo->find($id);
         $user->setActif(false);
+        $user->setRoles(["ROLE_DISABLED"]);
         $em->flush();
 
         return $this->redirectToRoute('app_admin_gestion');
@@ -189,8 +204,12 @@ class UserController extends AbstractController
      */
     public function enableUser($id, ParticipantRepository $partRepo, EntityManagerInterface $em): Response
     {
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         $user = $partRepo->find($id);
         $user->setActif(true);
+        $user->setRoles(["ROLE_USER"]);
         $em->flush();
 
         return $this->redirectToRoute('app_admin_gestion');
@@ -202,12 +221,23 @@ class UserController extends AbstractController
      */
     public function removeUser($id, ParticipantRepository $partRepo, EntityManagerInterface $em): Response
     {
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         $user = $partRepo->find($id);
         $partRepo->remove($user);
         $em->flush();
 
         return $this->redirectToRoute('app_admin_gestion');
 
+    }
+
+    /**
+     * @Route("/compte-desactive", name="app_disabled")
+     */
+
+    public function showDisabled():Response{
+        return $this->render('user/compte_desactive.html.twig');
     }
 
 //    /**

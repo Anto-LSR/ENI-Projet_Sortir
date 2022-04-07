@@ -20,6 +20,9 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         //VERIFICATION ACCES AU REGISTER
+        if($this->isGranted('ROLE_DISABLED')){
+            return $this->redirectToRoute("app_disabled");
+        }
         if(!$this->getUser()){
             return $this->redirectToRoute('app_login');
         }else if($this->getUser()->getAdministrateur() == false ){
