@@ -49,9 +49,9 @@ class SiteRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('s');
 
-        //Condition : filtre sur le contenu du nom du site
+        //Condition : filtre sur le champ rechercher pour filtrer les sites par nom
         if(trim($recherche) != null) {
-            $qb->andWhere($qb->expr()->like('s.nomSite', ':search'))
+            $qb->Where($qb->expr()->like('s.nomSite', ':search'))
                 ->setParameter('search', '%'.trim($recherche).'%');
         }
         return $qb->getQuery()->getResult();

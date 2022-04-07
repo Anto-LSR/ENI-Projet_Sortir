@@ -59,7 +59,7 @@ class SiteController extends AbstractController
     /**
      * @Route("/listeSites", name="app_listeSites")
      */
-    public function listeSites(SiteRepository $siteRepo, Request $request): Response
+    public function listeSites(SiteRepository $siteRepo): Response
     {
         //securisation : page accessible seulement pour l'administrateur
         if($this->getUser()->getAdministrateur() == true){
