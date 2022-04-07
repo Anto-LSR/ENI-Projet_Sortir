@@ -62,7 +62,7 @@ class SiteController extends AbstractController
     /**
      * @Route("/listeSites", name="app_listeSites")
      */
-    public function listeSites(SiteRepository $siteRepo, Request $request): Response
+    public function listeSites(SiteRepository $siteRepo): Response
     {
         if($this->isGranted('ROLE_DISABLED')){
             return $this->redirectToRoute("app_disabled");
