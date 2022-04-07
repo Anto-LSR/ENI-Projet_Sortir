@@ -38,7 +38,7 @@ class SiteController extends AbstractController
                 //On hydrate l'attribut 'nomSite' avec ce que l'administrateur à saisi
                 $site->setNomSite($nomSite);
                 $nomSite = $site->getNomSite();
-                //On recherche le nom du site saisir dans le Repository
+                //On recherche le nom du site saisi dans le Repository
                 $siteName = $siteRepo->findOneBy(['nomSite' => $nomSite]);
 
                 if($siteName == null){
